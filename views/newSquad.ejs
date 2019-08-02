@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<% include partials/head.ejs %>
+	</head>
+	<body>
+		<% include partials/header.ejs %>
+		<h1>Form a New Squad</h1>
+		<form action="/squads" method="POST" id="newSquadForm">
+			<textarea
+				rows="20"
+				cols="30"
+				name="names"
+				form="newSquadForm"
+				placeholder="List of names, each on a new line"
+			></textarea>
+			<input type="submit" value="Create Squad" />
+		</form>
+		<% include partials/footer.ejs %>
+	</body>
+</html>
