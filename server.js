@@ -1,17 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const PORT = process.env.PORT || 3000; //heroku uses a different port
-
-// How to connect to the database either via heroku or locally
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/DB_NAME';
-
+const methodOverride = require('method-override');
+const PORT = process.env.PORT || 3000;
+const squadController = require('./controllers/squad_controller.js');
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/squad';
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, () => {
 	console.log('connected to mongo database');
 });
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static('public'));
+app.use(methodOverride('_method'));
+app.use('/squads', squadController);
+
 app.get('/', (req, res) => {
-	res.send('app is running!');
+	res.render('index.ejs');
 });
 
 app.listen(PORT, () => console.log('Listening on port:', PORT));
