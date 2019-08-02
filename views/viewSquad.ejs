@@ -2,10 +2,27 @@
 <html lang="en">
 	<head>
 		<% include partials/head.ejs %>
+		<script
+			defer
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous"
+		></script>
+		<script defer src="/js/viewSquad.js"></script>
+		<style>
+			#squadIndex {
+				display: none;
+			}
+		</style>
 	</head>
 	<body>
 		<% include partials/header.ejs %>
+		<div id="squadIndex"><%= foundSquad.id %></div>
 		<h1>View Squad</h1>
+		<div id="main"></div>
+		<!-- <% foundSquad.names.forEach(name => { %>
+		<p><%= name %></p>
+		<% }) %> -->
 		<% include partials/footer.ejs %>
 	</body>
 </html>
