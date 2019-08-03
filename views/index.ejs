@@ -4,8 +4,37 @@
 		<% include partials/head.ejs %>
 	</head>
 	<body>
-		<% include partials/header.ejs %>
-		<a href="/squads/new">Create New Squad</a>
-		<% include partials/footer.ejs %>
+		<div id="brainBox">
+			<div id="headings">
+				<h1>SquadFormer</h1>
+				<h2>The random group generator with a memory.</h2>
+			</div>
+			<object type="image/svg+xml" data="/images/brain.svg" id="brain"></object>
+			<div id="c1" class="circle shapesTop groupAnimation"></div>
+			<div id="c2" class="triangle-up shapesTop groupAnimation"></div>
+			<div id="c3" class="square shapesTop groupAnimation"></div>
+			<div id="c4" class="trapezoid shapesTop groupAnimation"></div>
+			<div id="c5" class="parallelogram shapesTop groupAnimation"></div>
+			<div id="c6" class="diamond shapesTop groupAnimation"></div>
+			<div id="c7" class="egg shapesBottom groupAnimation"></div>
+			<div id="c8" class="pentagon shapesBottom groupAnimation"></div>
+			<div id="c9" class="x shapesBottom groupAnimation"></div>
+			<div id="c10" class="beveledSquare shapesBottom groupAnimation"></div>
+			<div id="c11" class="hexagon shapesBottom groupAnimation"></div>
+			<div id="c12" class="rightArrow shapesBottom groupAnimation"></div>
+			<div id="brainButtons">
+				<a href="/squads/new"
+					><button class="buttonOutline button-outline" id="createSquadButton">
+						Create Squad
+					</button></a
+				>
+				<button class="buttonFill" id="createSquadButton">
+					Go To Last Created Squad
+				</button>
+			</div>
+		</div>
+		<footer>
+			<% include partials/footer.ejs %>
+		</footer>
 	</body>
 </html>

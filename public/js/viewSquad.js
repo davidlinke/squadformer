@@ -26,7 +26,7 @@ const showNames = squadObject => {
 getSquadObject(squadID);
 
 const showGroupForm = () => {
-	const $title = $('<h2>').text('Generate Random Groups');
+	const $title = $('<h3>').text('Generate Random Groups');
 	$('#main').append($title);
 	const $form = $('<form>')
 		.attr('onsubmit', 'return false')
