@@ -301,6 +301,7 @@ body {
 
 #brainBox {
 	width: 100vw;
+	position: absolute;
 }
 
 #brain {
@@ -337,6 +338,11 @@ h2 {
 
 h3 {
 	color: var(--main-color);
+}
+
+.bold {
+	font-weight: 600;
+	font-style: italic;
 }
 
 #brainButtons {
@@ -377,8 +383,13 @@ button {
 }
 
 footer {
-	display: block;
 	text-align: center;
+}
+
+#homefooter {
+	position: absolute;
+	width: 100vw;
+	top: 90vw;
 }
 
 @keyframes shapeAnimation1 {
