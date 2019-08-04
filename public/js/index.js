@@ -5,7 +5,7 @@ $(window).on('load', function() {
 	};
 
 	// Resize height of outer brain box on load
-	// SOMETIMES FIRES BEFORE THINGS ARE LOADED, adding a small delay seemed to fix this
+	// SOMETIMES FIRES BEFORE THINGS ARE LOADED, adding a small delay fixes this
 	setTimeout(setHeight, 100);
 
 	// Resize height of outer brain box on window resize
@@ -17,7 +17,7 @@ $(window).on('load', function() {
 	// Show last created squad button if one exists and set link / adjust layout
 	if (localStorage.getItem('squad')) {
 		$('#lastCreatedSquadButton').css('display', 'block');
-		$('#brainButtons').css('top', '57%');
+		$('#brainButtons').css('top', '57%'); // UPDATE FOR SMALL SCREEN LAYOUTS!
 		$('#lastSquadLink').attr(
 			'href',
 			`/squads/${localStorage.getItem('squad')}`
@@ -38,5 +38,4 @@ $('#createSquadButton').on('click', () => {
 	} else {
 		$('#createForm').slideUp(500);
 	}
-	// $('#createForm').css('display', 'block');
 });
