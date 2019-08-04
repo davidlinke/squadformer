@@ -4,6 +4,8 @@
 :root {
 	--main-color: #9f9f9f;
 	--contrast-color: #faf4ed;
+	--main-highlight-color: #848484;
+	--contrast-highlight-color: #ede9e4;
 	--contrast-color-old: #fdf3e7;
 	--blue: #abd5df;
 	--green: #9bc9b2;
@@ -63,7 +65,7 @@ h3 {
 #brainButtons {
 	position: absolute;
 	width: 100%;
-	top: 57%;
+	top: 59%;
 	left: 0;
 	right: 0;
 	z-index: 1;
@@ -79,33 +81,16 @@ h3 {
 	background-color: var(--contrast-color);
 	border-color: var(--contrast-color);
 	color: var(--main-color);
-	font-family: 'Oswald', sans-serif;
-	/* color: black; */
-	/* font-weight: 600; */
-	/* font-size: 1.4rem; */
 }
 
 .buttonFill:hover {
-	background-color: var(--main-color);
-	border-color: var(--contrast-color);
+	background-color: var(--green);
+	border-color: var(--green);
 	color: var(--contrast-color);
 }
 
 .buttonImportant {
 	color: var(--green);
-}
-
-.buttonOutline.button-outline {
-	background-color: transparent;
-	color: var(--contrast-color);
-	border-color: var(--contrast-color);
-	font-family: 'Oswald', sans-serif;
-}
-
-.buttonOutline.button-outline:hover {
-	background-color: var(--contrast-color);
-	border-color: var(--contrast-color);
-	color: var(--main-color);
 }
 
 button {
@@ -117,9 +102,11 @@ footer {
 }
 
 #homefooter {
-	position: absolute;
+	/* position: absolute;
 	width: 100vw;
-	top: 90vw;
+	top: 90vw; */
+	/* margin-top: 4%; */
+	/* playing with the margin causes jumpiness when auto scrolling */
 }
 
 #madeBy {
@@ -129,4 +116,111 @@ footer {
 a {
 	color: var(--blue);
 	font-family: 'Oswald', sans-serif;
+}
+
+#createForm {
+	/* display: none; */
+	/* position: absolute; */
+	/* position: relative; */
+	padding: 0 35%;
+	/* top: 60vw; */
+	display: none;
+}
+
+#lastCreatedSquadButton {
+	display: none;
+}
+
+#createTextArea {
+	height: 300px;
+}
+
+#newSquadForm {
+	text-align: center;
+}
+
+.button,
+button,
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+	font-family: 'Oswald', sans-serif;
+	background-color: var(--main-color);
+	border: 0.1rem solid var(--main-color);
+	border-radius: 0.4rem;
+	color: var(--contrast-color);
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1.1rem;
+	font-weight: 700;
+	height: 3.8rem;
+	letter-spacing: 0.1rem;
+	line-height: 3.8rem;
+	padding: 0 3rem;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.button:focus,
+.button:hover,
+button:focus,
+button:hover,
+input[type='button']:focus,
+input[type='button']:hover,
+input[type='reset']:focus,
+input[type='reset']:hover,
+input[type='submit']:focus,
+input[type='submit']:hover {
+	font-family: 'Oswald', sans-serif;
+	background-color: var(--main-highlight-color);
+	border-color: var(--main-highlight-color);
+	color: var(--contrast-color);
+}
+
+input[type='email'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='url'],
+input[type='color'],
+input[type='date'],
+input[type='month'],
+input[type='week'],
+input[type='datetime'],
+input[type='datetime-local'],
+input:not([type]),
+textarea,
+select {
+	background-color: transparent;
+	border: 0.1rem solid var(--main-color);
+	border-radius: 0.4rem;
+	box-shadow: none;
+	box-sizing: inherit;
+	height: 3.8rem;
+	padding: 0.6rem 1rem;
+	width: 100%;
+}
+
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='password']:focus,
+input[type='search']:focus,
+input[type='tel']:focus,
+input[type='text']:focus,
+input[type='url']:focus,
+input[type='color']:focus,
+input[type='date']:focus,
+input[type='month']:focus,
+input[type='week']:focus,
+input[type='datetime']:focus,
+input[type='datetime-local']:focus,
+input:not([type]):focus,
+textarea:focus,
+select:focus {
+	border-color: var(--main-color);
+	outline: 0;
 }

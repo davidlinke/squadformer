@@ -1,5 +1,7 @@
 const squadID = $('#squadIndex').text();
 
+localStorage.setItem('squad', squadID);
+
 const getSquadObject = id => {
 	$.ajax({
 		url: `/squads/data/${id}`,

@@ -2,41 +2,66 @@
 <html lang="en">
 	<head>
 		<% include partials/head.ejs %>
+		<script
+			defer
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous"
+		></script>
+		<script defer src="/js/index.js"></script>
 	</head>
 	<body>
-		<div id="brainBox">
-			<div id="headings">
-				<h1>SquadFormer</h1>
-				<h2 id="tagline">
-					The random group generator with a <span class="bold">memory</span>.
-				</h2>
-			</div>
-			<object type="image/svg+xml" data="/images/brain.svg" id="brain"></object>
-			<div id="c1" class="circle shapesTop groupAnimation"></div>
-			<div id="c2" class="triangle-up shapesTop groupAnimation"></div>
-			<div id="c3" class="square shapesTop groupAnimation"></div>
-			<div id="c4" class="trapezoid shapesTop groupAnimation"></div>
-			<div id="c5" class="parallelogram shapesTop groupAnimation"></div>
-			<div id="c6" class="diamond shapesTop groupAnimation"></div>
-			<div id="c7" class="egg shapesBottom groupAnimation"></div>
-			<div id="c8" class="pentagon shapesBottom groupAnimation"></div>
-			<div id="c9" class="x shapesBottom groupAnimation"></div>
-			<div id="c10" class="beveledSquare shapesBottom groupAnimation"></div>
-			<div id="c11" class="hexagon shapesBottom groupAnimation"></div>
-			<div id="c12" class="rightArrow shapesBottom groupAnimation"></div>
-			<div id="brainButtons">
-				<button
-					class="homeButton buttonFill buttonImportant"
-					id="createSquadButton"
-				>
-					Last Created Squad
-				</button>
-				<a href="/squads/new"
-					><button class="homeButton buttonFill" id="createSquadButton">
+		<div id="brainOuter">
+			<div id="brainBox">
+				<div id="headings">
+					<h1>SquadFormer</h1>
+					<h2 id="tagline">
+						The random group generator with a <span class="bold">memory</span>.
+					</h2>
+				</div>
+				<object
+					type="image/svg+xml"
+					data="/images/brain.svg"
+					id="brain"
+				></object>
+				<div id="c1" class="circle shapesTop groupAnimation"></div>
+				<div id="c2" class="triangle-up shapesTop groupAnimation"></div>
+				<div id="c3" class="square shapesTop groupAnimation"></div>
+				<div id="c4" class="trapezoid shapesTop groupAnimation"></div>
+				<div id="c5" class="parallelogram shapesTop groupAnimation"></div>
+				<div id="c6" class="diamond shapesTop groupAnimation"></div>
+				<div id="c7" class="egg shapesBottom groupAnimation"></div>
+				<div id="c8" class="pentagon shapesBottom groupAnimation"></div>
+				<div id="c9" class="x shapesBottom groupAnimation"></div>
+				<div id="c10" class="beveledSquare shapesBottom groupAnimation"></div>
+				<div id="c11" class="hexagon shapesBottom groupAnimation"></div>
+				<div id="c12" class="rightArrow shapesBottom groupAnimation"></div>
+				<div id="brainButtons">
+					<a id="lastSquadLink"
+						><button
+							class="homeButton buttonFill buttonImportant"
+							id="lastCreatedSquadButton"
+						>
+							Last Created Squad
+						</button>
+					</a>
+					<button class="homeButton buttonFill" id="createSquadButton">
 						Create New Squad
-					</button></a
-				>
+					</button>
+				</div>
 			</div>
+		</div>
+		<div id="createForm">
+			<form action="/squads" method="POST" id="newSquadForm">
+				<textarea
+					name="names"
+					form="newSquadForm"
+					placeholder="List of names, each on a new line"
+					id="createTextArea"
+					required
+				></textarea>
+				<input type="submit" value="Create Squad" />
+			</form>
 		</div>
 		<div id="homefooter">
 			<footer>
