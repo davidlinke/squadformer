@@ -35,6 +35,7 @@ $('#createSquadButton').on('click', () => {
 			},
 			500
 		);
+		$('#createTextArea').focus();
 	} else {
 		$('#createForm').slideUp(500);
 	}
