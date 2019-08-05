@@ -1,25 +1,40 @@
 const express = require('express');
 const squad = express.Router();
 
-const group = require('../models/group.js');
+// MAYBE DONT NEED
+const mongoose = require('mongoose');
+let ObjectId = require('mongodb').ObjectID;
 
-squad.get('/new', (req, res) => {
-	res.render('newSquad.ejs');
-});
+// const Schemas = require('../models/group.js');
 
-// CLEANER SYNTAX, CAN CHAIN SAME ENDPOINTS
-// squad.route('/new')
-// 	.get((req, res) => {
-// 		res.render('newSquad.ejs');
-// 	});
+const squadModel = require('../models/group.js');
 
 squad.post('/', (req, res) => {
-	// console.log(req.body);
-	const names = {
-		names: separateNames(req.body.names)
+	const names = separateNames(req.body.names);
+
+	const newSquadNames = [];
+
+	names.forEach(personName => {
+		const personID = new ObjectId();
+
+		const personObj = {
+			name: personName,
+			absent: false,
+			archived: false,
+			id: personID
+		};
+
+		newSquadNames.push(personObj);
+	});
+
+	const newSquad = {
+		squadName: 'My Squad',
+		names: newSquadNames,
+		pastGroups: [],
+		pastCombinations: {}
 	};
-	// console.log(names);
-	group.create(names, (err, createdSquad) => {
+
+	squadModel.create(newSquad, (err, createdSquad) => {
 		if (err) {
 			console.log(err);
 		}
@@ -27,8 +42,85 @@ squad.post('/', (req, res) => {
 	});
 });
 
+// OLD POST FUNCTION
+// squad.post('/', (req, res) => {
+// 	// console.log(req.body);
+// 	const names = {
+// 		names: separateNames(req.body.names)
+// 	};
+// 	// console.log(names);
+// 	Schemas.group.create(names, (err, createdSquad) => {
+// 		if (err) {
+// 			console.log(err);
+// 		}
+// 		res.redirect('/squads/' + createdSquad.id);
+// 	});
+// });
+
+// squad.post('/', (req, res) => {
+// 	// console.log(req.body);
+// 	const newSquad = {
+// 		squadName: 'My Squad'
+// 	};
+
+// 	let newSquadId = null;
+// 	let newNamesId = null;
+
+// 	const names = separateNames(req.body.names);
+
+// 	const newSquadNames = [];
+
+// 	names.forEach(personName => {
+// 		const personObj = {
+// 			name: personName,
+// 			absent: false,
+// 			archived: false
+// 		};
+
+// 		newSquadNames.push(personObj);
+// 	});
+
+// 	Schemas.group.create(newSquad, (err, createdSquad) => {
+// 		newSquadId = createdSquad.id;
+// 		console.log(createdSquad);
+// 	});
+
+// 	Schemas.names.create(newSquadNames, (err, createdSquadNames) => {
+// 		newNamesId = createdSquadNames.id;
+// 		console.log(createdSquadNames);
+// 	});
+
+// 	Schemas.group.findByIdAndUpdate(newSquadId, function(err, user) {
+// 		$set: {
+// 			names: newNamesId;
+// 		}
+// 	});
+
+// 	console.log(newSquadId);
+// 	console.log(newNamesId);
+
+// 	Schemas.group.findById(newSquadId, function(err, user) {
+// 		console.log(user);
+// 	});
+
+// 	Schemas.group.findById(newNamesId, function(err, user) {
+// 		console.log(user);
+// 	});
+
+// 	// const names = {
+// 	// 	names: separateNames(req.body.names)
+// 	// };
+// 	// console.log(names);
+// 	// Schemas.group.create(names, (err, createdSquad) => {
+// 	// 	if (err) {
+// 	// 		console.log(err);
+// 	// 	}
+// 	// 	res.redirect('/squads/' + createdSquad.id);
+// 	// });
+// });
+
 squad.get('/:id', (req, res) => {
-	group.findById(req.params.id, (err, foundSquad) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
 		if (err) {
 			console.log(err);
 		}
@@ -39,26 +131,30 @@ squad.get('/:id', (req, res) => {
 	});
 });
 
-squad.get('/data/:id', (req, res) => {
-	group.findById(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		res.send(foundSquad);
-	});
-});
+// squad.get('/data/:id', (req, res) => {
+// 	Schemas.group.findById(req.params.id, (err, foundSquad) => {
+// 		if (err) {
+// 			console.log(err);
+// 		}
+// 		res.send(foundSquad);
+// 	});
+// });
 
-squad.get('/randomize/:size/:id', (req, res) => {
-	group.findById(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		const groups = makeGroups(foundSquad, req.params.size);
-		res.send(groups);
-	});
-});
+// squad.get('/randomize/:size/:id', (req, res) => {
+// 	Schemas.group.findById(req.params.id, (err, foundSquad) => {
+// 		if (err) {
+// 			console.log(err);
+// 		}
+// 		const groups = makeGroups(foundSquad, req.params.size);
+// 		res.send(groups);
+// 	});
+// });
 
 module.exports = squad;
+
+//////////////////////////////////////////////////
+// HELPER FUNCTIONS
+//////////////////////////////////////////////////
 
 // Split names by newline into array of strings
 const separateNames = stringOfNames => {
