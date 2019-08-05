@@ -224,3 +224,9 @@ select:focus {
 	border-color: var(--main-color);
 	outline: 0;
 }
+
+.draggableContainer {
+	width: 20%;
+	background: lightgrey;
+	margin: 2% 0;
+}

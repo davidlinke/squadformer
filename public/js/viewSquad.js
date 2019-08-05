@@ -60,6 +60,7 @@ const groupButtonListener = () => {
 	$('#groupSizeSubmit').on('click', () => {
 		let size = $('#groupSize').val();
 		getCombinations(squadID, size);
+		$('#combinationsDiv').empty();
 	});
 };
 
@@ -79,13 +80,53 @@ const getCombinations = (id, size) => {
 };
 
 const showCombinations = arrayOfGroups => {
-	$('#main').append($('<hr>'));
+	const $combinationsDiv = $('<div>').attr('id', 'combinationsDiv');
+	$('#main').append($($combinationsDiv));
+	$combinationsDiv.append($('<hr>'));
 	arrayOfGroups.forEach(group => {
-		const $group = $('<ul>');
-		$('#main').append($group);
+		const $div = $('<div>');
+		$div.attr('class', 'draggableContainer');
+		$combinationsDiv.append($div);
 		group.forEach(name => {
-			const $newName = $('<li>').text(name);
-			$group.append($newName);
+			const $newName = $('<div>').text(name);
+			$div.append($newName);
 		});
 	});
+
+	// Initialize dragging
+	dragging();
+};
+
+const dragAndDrop = {
+	init: function() {
+		this.dragula();
+		this.eventListeners();
+	},
+
+	eventListeners: function() {
+		this.dragula.on('drop', this.dropped.bind(this));
+	},
+
+	dragula: function() {
+		this.dragula = dragula(
+			// [document.querySelector('#left'), document.querySelector('#right')],
+			[document.querySelector('.draggableContainer')],
+			{
+				moves: this.canMove.bind(this)
+			}
+		);
+	},
+
+	canMove: function() {
+		return true;
+	},
+
+	dropped: function(el) {}
+};
+
+// dragAndDrop.init();
+
+const dragging = () => {
+	// Enable draggin for all containers with class draggableContainer
+	dragula([].slice.call(document.querySelectorAll('.draggableContainer')));
 };
