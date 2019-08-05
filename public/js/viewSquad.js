@@ -16,13 +16,17 @@ const getSquadObject = id => {
 };
 
 const showNames = squadObject => {
-	const $names = $('<ul>');
-	$('#main').prepend($('<hr>'));
+	const $names = $('<div>').attr('id', 'namesContainer');
 	$('#main').prepend($names);
 	squadObject.names.forEach(name => {
-		const $newName = $('<li>').text(name);
-		$names.append($newName);
+		const $nameDiv = $('<div>').attr('id', 'individualNamesContainer');
+		$names.append($nameDiv);
+		const $newName = $('<p>').text(name);
+		$nameDiv.append($newName);
 	});
+
+	// TEST DRAGGING SQUAD
+	// dragula([document.getElementById('namesContainer')]);
 };
 
 getSquadObject(squadID);
@@ -44,7 +48,8 @@ const showGroupForm = () => {
 		.attr('type', 'number')
 		.attr('id', 'groupSize')
 		.attr('min', '2')
-		.attr('max', '10');
+		.attr('max', '10')
+		.attr('value', '3');
 	$form.append($input);
 
 	const $submit = $('<input>')
@@ -60,7 +65,7 @@ const groupButtonListener = () => {
 	$('#groupSizeSubmit').on('click', () => {
 		let size = $('#groupSize').val();
 		getCombinations(squadID, size);
-		$('#combinationsDiv').empty();
+		$('#combinationsDiv').remove();
 	});
 };
 
@@ -96,35 +101,6 @@ const showCombinations = arrayOfGroups => {
 	// Initialize dragging
 	dragging();
 };
-
-const dragAndDrop = {
-	init: function() {
-		this.dragula();
-		this.eventListeners();
-	},
-
-	eventListeners: function() {
-		this.dragula.on('drop', this.dropped.bind(this));
-	},
-
-	dragula: function() {
-		this.dragula = dragula(
-			// [document.querySelector('#left'), document.querySelector('#right')],
-			[document.querySelector('.draggableContainer')],
-			{
-				moves: this.canMove.bind(this)
-			}
-		);
-	},
-
-	canMove: function() {
-		return true;
-	},
-
-	dropped: function(el) {}
-};
-
-// dragAndDrop.init();
 
 const dragging = () => {
 	// Enable draggin for all containers with class draggableContainer

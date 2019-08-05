@@ -18,12 +18,13 @@
 	</head>
 	<body>
 		<% include partials/header.ejs %>
-		<div id="squadIndex"><%= foundSquad.id %></div>
-		<h3>View Squad</h3>
-		<div id="main"></div>
-		<!-- <% foundSquad.names.forEach(name => { %>
-		<p><%= name %></p>
-		<% }) %> -->
-		<% include partials/footer.ejs %>
+		<div class="pageContainer">
+			<div id="squadIndex"><%= foundSquad.id %></div>
+			<h3>My Squad</h3>
+			<div id="main"></div>
+			<footer>
+				<% include partials/footer.ejs %>
+			</footer>
+		</div>
 	</body>
 </html>
