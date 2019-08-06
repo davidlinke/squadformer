@@ -30,7 +30,7 @@ squad.post('/', (req, res) => {
 		squadName: 'My Squad',
 		names: newSquadNames,
 		pastGroups: [],
-		pastCombinations: {}
+		pastCombinations: { seed: '' }
 	};
 
 	squadModel.create(newSquad, (err, createdSquad) => {
@@ -53,7 +53,6 @@ squad.get('/:id', (req, res) => {
 		res.render('viewSquad.ejs', {
 			foundSquad: foundSquad
 		});
-		// console.log(foundSquad);
 	});
 });
 
@@ -77,8 +76,6 @@ squad.get('/data/:id/names', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
-		// console.log(foundSquad.names);
-		// console.log('api sending names array now');
 		res.send(foundSquad.names);
 	});
 });
@@ -91,7 +88,12 @@ squad.get('/randomize/:size/:id', (req, res) => {
 		if (err) {
 			console.log(err);
 		}
-		const groups = makeGroups(foundSquad, req.params.size);
+		const groups = makeGroups(
+			foundSquad.names,
+			req.params.size,
+			foundSquad.pastCombinations
+		);
+		console.log(groups);
 		res.send(groups);
 	});
 });
@@ -102,16 +104,44 @@ module.exports = squad;
 // HELPER FUNCTIONS
 //////////////////////////////////////////////////
 
+//////////////////////////////////////////////////
 // Split names by newline into array of strings
+//////////////////////////////////////////////////
 const separateNames = stringOfNames => {
 	return stringOfNames.split('\r\n');
 };
 
-// Generate Random Combinations
-const makeGroups = (squadObject, groupSize) => {
-	let squadNames = squadObject.names;
+//////////////////////////////////////////////////
+// Make Random Groups
+//////////////////////////////////////////////////
+const makeGroups = (names, groupSize, pastCombinations) => {
+	console.log('Names:');
+	console.log(names);
 
-	// Function Source
+	console.log('Group Size:');
+	console.log(groupSize);
+
+	console.log('Past Combinations:');
+	console.log(pastCombinations);
+
+	// Handle invalid inputs
+	if (names.length <= 2 || groupSize <= 1) {
+		return 'invalid inputs';
+	}
+
+	// Build array of name indexes
+	let nameIndexesArray = [];
+	names.forEach((personObj, index) => {
+		console.log(personObj);
+		if (personObj.absent === false && personObj.archived === false) {
+			nameIndexesArray.push(index);
+		}
+	});
+
+	console.log('Names Array:');
+	console.log(nameIndexesArray);
+
+	// Randomize array of name indexes
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 	const shuffleArray = array => {
 		for (var i = array.length - 1; i > 0; i--) {
@@ -122,24 +152,100 @@ const makeGroups = (squadObject, groupSize) => {
 		}
 	};
 
-	shuffleArray(squadNames);
+	shuffleArray(nameIndexesArray);
 
+	console.log('Shuffled Name Indexes Array:');
+	console.log(nameIndexesArray);
+
+	// Build groups in order of shuffled array
 	const groupsArray = [];
 
-	for (let i = 0; i < squadNames.length; i = i + Number(groupSize)) {
-		// console.log(`i is ${i}`);
+	for (let i = 0; i < nameIndexesArray.length; i = i + Number(groupSize)) {
 		const tempArray = [];
 		for (let j = 0; j < Number(groupSize); j++) {
-			// console.log(`j is ${j}`);
-			if (squadNames[i + j]) {
-				tempArray.push(squadNames[i + j]);
+			if (nameIndexesArray[i + j] !== undefined) {
+				// without != undefined, the 0 index does not get added to the groups
+				tempArray.push(nameIndexesArray[i + j]);
 			}
-			// console.log('temp array is:');
-			// console.log(tempArray);
 		}
+		tempArray.sort();
 		groupsArray.push(tempArray);
 	}
-	// console.log(squadNames);
+
+	console.log('Groups:');
 	console.log(groupsArray);
-	return groupsArray;
+
+	// Return a random int between 0 and the max value passed to the function
+	const getRandomInt = max => {
+		return Math.floor(Math.random() * max);
+	};
+
+	// Convert array to comma separated string representation (I like this format better than JSON.stringify)
+	const groupToString = groupArray => {
+		let groupString = '';
+		groupArray.forEach((item, index) => {
+			groupString += item;
+			if (index != groupArray.length - 1) {
+				groupString += ',';
+			}
+		});
+		// console.log(groupString);
+		return groupString;
+	};
+
+	let anyRepeats = false;
+
+	// Only run if more than one group in array
+	if (groupsArray.length > 1) {
+		// maxLoops is an arbitray number for a reasonable number of times to try to find no repeats
+		const maxLoops = 500;
+
+		for (let i = 0; i < maxLoops; ++i) {
+			anyRepeats = false;
+			groupsArray.forEach((group, index) => {
+				groupToString(group);
+				if (pastCombinations.hasOwnProperty(groupToString(group))) {
+					// If past objects contains key with combination
+					// swap random element of group with one from a random element from another group then sort them
+					anyRepeats = true;
+					console.log('found repeat:');
+					console.log(group);
+					const tempID = group.splice(getRandomInt(group.length), 1)[0];
+					let otherIndex = index;
+					while (otherIndex == index) {
+						otherIndex = getRandomInt(groupsArray.length);
+					}
+					const otherGroup = groupsArray[otherIndex];
+					const tempID2 = otherGroup.splice(
+						getRandomInt(otherGroup.length),
+						1
+					)[0];
+					group.push(tempID2);
+					otherGroup.push(tempID);
+					group.sort();
+					otherGroup.sort();
+				}
+			});
+
+			// If no repeats found, break out of loop and return the groups
+			if (!anyRepeats) {
+				break;
+			}
+		}
+	}
+
+	if (anyRepeats) {
+		console.log('There are repeats in these groups');
+	}
+
+	return {
+		repeats: anyRepeats,
+		groups: groupsArray
+	};
 };
+
+//////////////////////////////////////////////////
+// Finalize random groups
+//////////////////////////////////////////////////
+// Add to pastCombinations (sort first)
+// Add to pastGroups
