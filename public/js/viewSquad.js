@@ -2,11 +2,20 @@ const squadID = $('#squadIndex').text();
 
 localStorage.setItem('squad', squadID);
 
-const getSquadObject = id => {
+const squadName = id => {
 	$.ajax({
-		url: `/squads/data/${id}`,
+		url: `/squads/data/${id}/squadname`,
+		success: data => {},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
+		}
+	});
+};
+
+const namesArrayOfObjects = id => {
+	$.ajax({
+		url: `/squads/data/${id}/names`,
 		success: data => {
-			// console.log(data);
 			showNames(data);
 		},
 		error: (request, status, err) => {
@@ -15,13 +24,18 @@ const getSquadObject = id => {
 	});
 };
 
-const showNames = squadObject => {
+const showNames = namesArray => {
+	// console.log('names array should follow');
+	// console.log(namesArray);
 	const $names = $('<div>').attr('id', 'namesContainer');
 	$('#main').prepend($names);
-	squadObject.names.forEach(name => {
-		const $nameDiv = $('<div>').attr('id', 'individualNamesContainer');
+	namesArray.forEach((nameObject, nameIndex) => {
+		// console.log(nameObject);
+		const $nameDiv = $('<div>')
+			.attr('id', 'individualNamesContainer')
+			.attr('nameIndex', nameIndex);
 		$names.append($nameDiv);
-		const $newName = $('<p>').text(name);
+		const $newName = $('<p>').text(nameObject.name);
 		$nameDiv.append($newName);
 	});
 
@@ -29,15 +43,18 @@ const showNames = squadObject => {
 	// dragula([document.getElementById('namesContainer')]);
 };
 
-getSquadObject(squadID);
+namesArrayOfObjects(squadID);
+squadName(squadID);
 
 const showGroupForm = () => {
+	const $showGroupFormDiv = $('<div>').attr('id', 'showGroupForm');
+	$('#main').append($showGroupFormDiv);
 	const $title = $('<h3>').text('Generate Random Groups');
-	$('#main').append($title);
+	$showGroupFormDiv.append($title);
 	const $form = $('<form>')
 		.attr('onsubmit', 'return false')
 		.attr('id', 'groupForm');
-	$('#main').append($form);
+	$showGroupFormDiv.append($form);
 
 	const $label = $('<label>')
 		.attr('for', 'groupSize')
