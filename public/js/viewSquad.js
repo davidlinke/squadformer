@@ -36,6 +36,20 @@ const namesArrayOfObjects = id => {
 };
 
 //////////////////////////////////////////////////
+// Post Groups When Saved
+//////////////////////////////////////////////////
+const saveGroupsToDB = (id, groups) => {
+	// console.log('Posting from browser...');
+	// console.log('groups data to be included:');
+	// console.log(groups);
+	$.ajax({
+		url: `/squads/savegroups/${id}`,
+		data: { groups: JSON.stringify(groups) },
+		type: 'POST'
+	});
+};
+
+//////////////////////////////////////////////////
 // Display Squad Name
 //////////////////////////////////////////////////
 const showSquadName = name => {
@@ -61,17 +75,16 @@ const showNames = namesArray => {
 	});
 };
 
-squadName(squadID);
-namesArrayOfObjects(squadID);
-
 //////////////////////////////////////////////////
 // Displays Form To Make Random Groups
 //////////////////////////////////////////////////
 const showGroupForm = () => {
 	const $showGroupFormDiv = $('<div>').attr('id', 'showGroupForm');
 	$('#main').append($showGroupFormDiv);
+	const $titlediv = $('<div>').attr('id', 'generateGroupsTitleDiv');
+	$showGroupFormDiv.append($titlediv);
 	const $title = $('<h3>').text('Generate Random Groups');
-	$showGroupFormDiv.append($title);
+	$titlediv.append($title);
 	const $form = $('<form>')
 		.attr('onsubmit', 'return false')
 		.attr('id', 'groupForm');
@@ -90,11 +103,14 @@ const showGroupForm = () => {
 		.attr('value', '3');
 	$form.append($input);
 
+	const $buildGroupsButtonDiv = $('<div>').attr('id', 'buildGroupsButtonDiv');
+	$form.append($buildGroupsButtonDiv);
+
 	const $submit = $('<input>')
 		.attr('type', 'submit')
 		.attr('id', 'groupSizeSubmit')
 		.attr('value', 'Build Groups');
-	$form.append($submit);
+	$buildGroupsButtonDiv.append($submit);
 
 	groupButtonListener();
 };
@@ -110,23 +126,31 @@ const groupButtonListener = () => {
 			let size = $('#groupSize').val();
 			getCombinations(squadID, size);
 			$('#combinationsDiv').remove();
+			$('#saveGroupsForm').remove();
 		} else {
 			$form.get(0).reportValidity(); //Need to display validity message
 		}
 	});
 };
 
-// $('#groupForm').submit(function(event) {
-// 	var $this = $(this);
-// 	$this.get(0).reportValidity();
-// });
+//////////////////////////////////////////////////
+// Save Generated Groups Listener
+//////////////////////////////////////////////////
+const groupSaveButtonListener = () => {
+	$('#groupSaveSubmit').on('click', () => {
+		saveGroupsToDB(squadID, saveGroups());
+	});
+};
 
-showGroupForm();
-
+//////////////////////////////////////////////////
+// Get group combinations
+//////////////////////////////////////////////////
 const getCombinations = (id, size) => {
 	$.ajax({
 		url: `/squads/randomize/${size}/${id}`,
 		success: data => {
+			// console.log('SHOW COMBINATIONS DATA:');
+			// console.log(data);
 			showCombinations(data);
 		},
 		error: (request, status, err) => {
@@ -135,25 +159,82 @@ const getCombinations = (id, size) => {
 	});
 };
 
+//////////////////////////////////////////////////
+// Show group combinations
+//////////////////////////////////////////////////
 const showCombinations = arrayOfGroups => {
 	const $combinationsDiv = $('<div>').attr('id', 'combinationsDiv');
 	$('#main').append($($combinationsDiv));
-	$combinationsDiv.append($('<hr>'));
 	arrayOfGroups.groups.forEach(group => {
 		const $div = $('<div>');
 		$div.attr('class', 'draggableContainer');
 		$combinationsDiv.append($div);
-		group.forEach(name => {
-			const $newName = $('<div>').text(name);
+		group.forEach(nameIndex => {
+			const $newName = $('<div>')
+				.text(arrayOfGroups.names[nameIndex].name)
+				.attr('nameIndex', nameIndex)
+				.attr('class', 'nameDiv');
 			$div.append($newName);
 		});
 	});
+
+	const $saveGroupsDiv = $('<div>').attr('id', 'saveGroupsForm');
+	$('#main').append($saveGroupsDiv);
+
+	const $form = $('<form>')
+		.attr('id', 'saveGroupForm')
+		.attr('onsubmit', 'return false');
+	$saveGroupsDiv.append($form);
+
+	const $submit = $('<input>')
+		.attr('type', 'submit')
+		.attr('id', 'groupSaveSubmit')
+		.attr('value', 'Save Groups');
+	$form.append($submit);
+
+	groupSaveButtonListener();
 
 	// Initialize dragging
 	dragging();
 };
 
+//////////////////////////////////////////////////
+// Save Generated Groups Listener
+//////////////////////////////////////////////////
+const saveGroups = () => {
+	const $groupContainers = $('.draggableContainer');
+
+	const groups = [];
+
+	// console.log($groupContainers);
+
+	$groupContainers.each((index, group) => {
+		// console.log(group);
+		const tempGroup = [];
+		// console.log($(group).children());
+
+		$(group)
+			.children()
+			.each(function() {
+				// console.log($(this).attr('nameindex'));
+				tempGroup.push(Number($(this).attr('nameindex')));
+			});
+		groups.push(tempGroup);
+	});
+
+	// console.log(groups);
+	return groups;
+};
+
+//////////////////////////////////////////////////
+// Enable Dragula dragging
+//////////////////////////////////////////////////
 const dragging = () => {
 	// Enable draggin for all containers with class draggableContainer
 	dragula([].slice.call(document.querySelectorAll('.draggableContainer')));
 };
+
+// CALL FUNCTIONS
+squadName(squadID);
+namesArrayOfObjects(squadID);
+showGroupForm();

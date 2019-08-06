@@ -1,9 +1,132 @@
 const express = require('express');
 const squad = express.Router();
 const squadModel = require('../models/group.js');
+const methodOverride = require('method-override');
+squad.use(methodOverride('_method'));
+squad.use(express.urlencoded({ extended: false }));
 
 // Need below for creating objectId's to work
 let ObjectId = require('mongodb').ObjectID;
+
+//////////////////////////////////////////////////
+// GET MAKE RANDOM GROUPS PAGE
+//////////////////////////////////////////////////
+squad.get('/:id', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		res.render('viewSquad.ejs', {
+			foundSquad: foundSquad
+		});
+	});
+});
+
+//////////////////////////////////////////////////
+// GET SQUAD NAME
+//////////////////////////////////////////////////
+squad.get('/data/:id/squadname', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(foundSquad.squadName);
+	});
+});
+
+//////////////////////////////////////////////////
+// GET SQUAD NAME
+//////////////////////////////////////////////////
+squad.put('/data/:id/squadname', (req, res) => {
+	squadModel.findByIdAndUpdate(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(foundSquad.squadName);
+	});
+});
+
+//////////////////////////////////////////////////
+// GET PEOPLE IN SQUAD NAMES
+//////////////////////////////////////////////////
+squad.get('/data/:id/names', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(foundSquad.names);
+	});
+});
+
+//////////////////////////////////////////////////
+// MAKE RANDOM GROUPS
+//////////////////////////////////////////////////
+squad.get('/randomize/:size/:id', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		const groups = makeGroups(
+			foundSquad.names,
+			req.params.size,
+			foundSquad.pastCombinations
+		);
+		// console.log(groups);
+		res.send(groups);
+	});
+});
+
+//////////////////////////////////////////////////
+// SAVE RANDOM GROUPS
+//////////////////////////////////////////////////
+squad.post('/savegroups/:id', (req, res) => {
+	// console.log('Received:');
+	// console.log(JSON.parse(req.body.groups));
+	const groups = JSON.parse(req.body.groups);
+
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+
+		const pastGroupCombinations = [];
+
+		groups.forEach((group, index) => {
+			// Make past combination keys and push into object
+			foundSquad.pastCombinations[groupToString(group)] = true;
+
+			// Make past groups into objects and push into pastGroupCombinations array
+			const newGroup = {
+				groupName: `Group ${index + 1}`,
+				group: group
+			};
+
+			pastGroupCombinations.push(newGroup);
+		});
+
+		const timestamp = new Date();
+		const groupID = new ObjectId();
+		const newPastGroups = {
+			id: groupID,
+			createdAt: timestamp,
+			pastGroupCombinations: pastGroupCombinations
+		};
+
+		foundSquad.pastGroups.push(newPastGroups);
+
+		console.log(foundSquad);
+
+		//Push back into db
+		squadModel.findByIdAndUpdate(
+			req.params.id,
+			foundSquad,
+			{ new: true },
+			(error, updatedSquad) => {
+				res.send('added to db');
+			}
+		);
+	});
+});
 
 //////////////////////////////////////////////////
 // CREATE SQUAD POST FUNCTION
@@ -43,64 +166,6 @@ squad.post('/', (req, res) => {
 });
 
 //////////////////////////////////////////////////
-// GET MAKE RANDOM GROUPS PAGE
-//////////////////////////////////////////////////
-squad.get('/:id', (req, res) => {
-	squadModel.findById(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		res.render('viewSquad.ejs', {
-			foundSquad: foundSquad
-		});
-	});
-});
-
-//////////////////////////////////////////////////
-// GET SQUAD NAME
-//////////////////////////////////////////////////
-squad.get('/data/:id/squadname', (req, res) => {
-	squadModel.findById(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		res.send(foundSquad.squadName);
-	});
-});
-
-//////////////////////////////////////////////////
-// GET PEOPLE IN SQUAD NAMES
-//////////////////////////////////////////////////
-squad.get('/data/:id/names', (req, res) => {
-	squadModel.findById(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		res.send(foundSquad.names);
-	});
-});
-
-//////////////////////////////////////////////////
-// MAKE RANDOM GROUPS
-//////////////////////////////////////////////////
-squad.get('/randomize/:size/:id', (req, res) => {
-	squadModel.findById(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		const groups = makeGroups(
-			foundSquad.names,
-			req.params.size,
-			foundSquad.pastCombinations
-		);
-		console.log(groups);
-		res.send(groups);
-	});
-});
-
-module.exports = squad;
-
-//////////////////////////////////////////////////
 // HELPER FUNCTIONS
 //////////////////////////////////////////////////
 
@@ -115,14 +180,14 @@ const separateNames = stringOfNames => {
 // Make Random Groups
 //////////////////////////////////////////////////
 const makeGroups = (names, groupSize, pastCombinations) => {
-	console.log('Names:');
-	console.log(names);
+	// console.log('Names:');
+	// console.log(names);
 
-	console.log('Group Size:');
-	console.log(groupSize);
+	// console.log('Group Size:');
+	// console.log(groupSize);
 
-	console.log('Past Combinations:');
-	console.log(pastCombinations);
+	// console.log('Past Combinations:');
+	// console.log(pastCombinations);
 
 	// Handle invalid inputs
 	if (names.length <= 2 || groupSize <= 1) {
@@ -132,14 +197,14 @@ const makeGroups = (names, groupSize, pastCombinations) => {
 	// Build array of name indexes
 	let nameIndexesArray = [];
 	names.forEach((personObj, index) => {
-		console.log(personObj);
+		// console.log(personObj);
 		if (personObj.absent === false && personObj.archived === false) {
 			nameIndexesArray.push(index);
 		}
 	});
 
-	console.log('Names Array:');
-	console.log(nameIndexesArray);
+	// console.log('Names Array:');
+	// console.log(nameIndexesArray);
 
 	// Randomize array of name indexes
 	// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -154,8 +219,8 @@ const makeGroups = (names, groupSize, pastCombinations) => {
 
 	shuffleArray(nameIndexesArray);
 
-	console.log('Shuffled Name Indexes Array:');
-	console.log(nameIndexesArray);
+	// console.log('Shuffled Name Indexes Array:');
+	// console.log(nameIndexesArray);
 
 	// Build groups in order of shuffled array
 	const groupsArray = [];
@@ -172,25 +237,12 @@ const makeGroups = (names, groupSize, pastCombinations) => {
 		groupsArray.push(tempArray);
 	}
 
-	console.log('Groups:');
-	console.log(groupsArray);
+	// console.log('Groups:');
+	// console.log(groupsArray);
 
 	// Return a random int between 0 and the max value passed to the function
 	const getRandomInt = max => {
 		return Math.floor(Math.random() * max);
-	};
-
-	// Convert array to comma separated string representation (I like this format better than JSON.stringify)
-	const groupToString = groupArray => {
-		let groupString = '';
-		groupArray.forEach((item, index) => {
-			groupString += item;
-			if (index != groupArray.length - 1) {
-				groupString += ',';
-			}
-		});
-		// console.log(groupString);
-		return groupString;
 	};
 
 	let anyRepeats = false;
@@ -208,8 +260,8 @@ const makeGroups = (names, groupSize, pastCombinations) => {
 					// If past objects contains key with combination
 					// swap random element of group with one from a random element from another group then sort them
 					anyRepeats = true;
-					console.log('found repeat:');
-					console.log(group);
+					// console.log('found repeat:');
+					// console.log(group);
 					const tempID = group.splice(getRandomInt(group.length), 1)[0];
 					let otherIndex = index;
 					while (otherIndex == index) {
@@ -235,17 +287,27 @@ const makeGroups = (names, groupSize, pastCombinations) => {
 	}
 
 	if (anyRepeats) {
-		console.log('There are repeats in these groups');
+		// console.log('There are repeats in these groups');
 	}
 
 	return {
 		repeats: anyRepeats,
-		groups: groupsArray
+		groups: groupsArray,
+		names: names
 	};
 };
 
-//////////////////////////////////////////////////
-// Finalize random groups
-//////////////////////////////////////////////////
-// Add to pastCombinations (sort first)
-// Add to pastGroups
+// Convert array to comma separated string representation (I like this format better than JSON.stringify)
+const groupToString = groupArray => {
+	let groupString = '';
+	groupArray.forEach((item, index) => {
+		groupString += item;
+		if (index != groupArray.length - 1) {
+			groupString += ',';
+		}
+	});
+	// console.log(groupString);
+	return groupString;
+};
+
+module.exports = squad;

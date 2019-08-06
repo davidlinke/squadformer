@@ -58,6 +58,7 @@ h3 {
 #headerDiv {
 	margin: 1% 1%;
 }
+
 #headerText {
 	font-weight: 600;
 	/* font-size: 3rem; */
@@ -120,11 +121,6 @@ footer {
 }
 
 #homefooter {
-	/* position: absolute;
-	width: 100vw;
-	top: 90vw; */
-	/* margin-top: 4%; */
-	/* playing with the margin causes jumpiness when auto scrolling */
 }
 
 #madeBy {
@@ -142,11 +138,7 @@ a:hover {
 }
 
 #createForm {
-	/* display: none; */
-	/* position: absolute; */
-	/* position: relative; */
 	padding: 0 35%;
-	/* top: 60vw; */
 	display: none;
 }
 
@@ -248,12 +240,6 @@ select:focus {
 	outline: 0;
 }
 
-.draggableContainer {
-	width: 20%;
-	background: lightgrey;
-	margin: 2% 0;
-}
-
 #namesContainer {
 	background-color: var(--main-color);
 	display: flex;
@@ -281,4 +267,40 @@ select:focus {
 #showGroupForm {
 	margin-top: 4%;
 	padding: 0 30%;
+}
+
+.draggableContainer {
+	width: 30%;
+	background: lightgrey;
+	margin: 2% 0;
+	display: flex;
+	flex-wrap: wrap;
+	padding: 1vw;
+	justify-content: space-evenly;
+	align-items: flex-start;
+	align-content: flex-start;
+}
+
+.nameDiv {
+	width: 100%;
+	margin: 1vw;
+	padding: 1vw;
+	cursor: grab;
+	display: block;
+	background-color: var(--contrast-color);
+	align-self: flex-start;
+}
+
+#combinationsDiv {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	padding: 1vw;
+}
+
+#buildGroupsButtonDiv,
+#saveGroupsForm,
+#squadNameDiv,
+#generateGroupsTitleDiv {
+	text-align: center;
 }
