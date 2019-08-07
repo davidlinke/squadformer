@@ -1,5 +1,9 @@
 const squadID = $('#squadIndex').text();
 
+let selectedNameIndex = 0;
+let selectedNameAbsentState = false;
+let listenerNameState = false;
+
 //////////////////////////////////////////////////
 // Upon Visiting Page, Store ID in Local Storage
 //////////////////////////////////////////////////
@@ -91,13 +95,27 @@ const showNameEdit = () => {
 // Displays Names On The Page
 //////////////////////////////////////////////////
 const showNames = namesArray => {
+	$('#divForNames').remove();
+	const $divForNames = $('<div>').attr('id', 'divForNames');
+	$('#namesContainer').append($divForNames);
+
 	namesArray.forEach((nameObject, nameIndex) => {
-		const $nameDiv = $('<div>')
-			.attr('class', 'individualNamesContainer')
-			.attr('nameIndex', nameIndex);
-		$('#namesContainer').append($nameDiv);
-		const $newName = $('<p>').text(nameObject.name);
-		$nameDiv.append($newName);
+		if (nameObject.archived === false) {
+			const $nameDiv = $('<div>')
+				.attr('class', 'individualNamesContainer')
+				.attr('nameIndex', nameIndex);
+
+			if (nameObject.absent) {
+				$nameDiv.attr('absent', 'true');
+				$nameDiv.attr('id', 'absent');
+			} else {
+				$nameDiv.attr('absent', 'false');
+			}
+
+			$divForNames.append($nameDiv);
+			const $newName = $('<p>').text(nameObject.name);
+			$nameDiv.append($newName);
+		}
 	});
 
 	editSquadNameMenu();
@@ -294,7 +312,9 @@ const editSquadNameMenu = () => {
 
 	popup.hide();
 
-	editTitleListener();
+	if (!listenerNameState) {
+		editTitleListener();
+	}
 
 	ref.click(function() {
 		if (
@@ -324,6 +344,7 @@ const editSquadNameMenu = () => {
 // Edit Squad Names Listener
 //////////////////////////////////////////////////
 const editTitleListener = () => {
+	console.log('listener initialized');
 	$('#startTitleEdit').on('click', () => {
 		if ($('#startTitleEdit').text() === 'edit') {
 			// Edit State, switch to save
@@ -356,29 +377,92 @@ const editPeopleMenu = () => {
 
 	popup.hide();
 
-	// editTitleListener();
+	// SET UP LISTENERS
+	if (!listenerNameState) {
+		removeNameListener();
+		markAsAbsentListener();
+		listenerNameState = true;
+	}
 
 	ref.click(function() {
-		console.log(this);
-		if (
-			popup.is(':visible') &&
-			$('#squadTitle').attr('contenteditable') === 'false'
-		) {
+		const clickedNameIndex = $(this).attr('nameIndex');
+		const selectedName = $(`[nameIndex=${clickedNameIndex}]`);
+
+		let selectedNameAbsense = $(this).attr('absent');
+		if (selectedNameAbsense === 'true') {
+			selectedNameAbsense = true;
+		} else {
+			selectedNameAbsense = false;
+		}
+
+		if (popup.is(':visible')) {
 			popup.hide();
 		} else {
+			selectedNameIndex = Number(clickedNameIndex);
+			selectedNameAbsentState = selectedNameAbsense;
+			console.log(selectedNameIndex);
 			popup.show();
-			var popper = new Popper(ref, popup, {
+			var popper = new Popper(selectedName, popup, {
 				placement: 'right',
 				onCreate: function(data) {
 					// console.log(data);
-				},
-				modifiers: {
-					offset: {
-						enabled: true,
-						offset: '0,20'
-					}
 				}
 			});
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Remove Names Listener
+//////////////////////////////////////////////////
+const removeNameListener = () => {
+	$('#removeName').on('click', () => {
+		// Remove Name
+		removeName(squadID, selectedNameIndex);
+
+		// Hide popup
+		$('#editNamesPopup').hide();
+	});
+};
+
+//////////////////////////////////////////////////
+// Remove Name
+//////////////////////////////////////////////////
+const removeName = (id, nameIndex) => {
+	$.ajax({
+		url: `/squads/data/${id}/${nameIndex}`,
+		type: 'DELETE',
+		success: data => {
+			namesArrayOfObjects(squadID);
+		},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Mark As Absent Listener
+//////////////////////////////////////////////////
+const markAsAbsentListener = () => {
+	$('#markNameAbsent').on('click', () => {
+		markAsAbsent(squadID, selectedNameIndex, selectedNameAbsentState);
+		$('#editNamesPopup').hide();
+	});
+};
+
+//////////////////////////////////////////////////
+// Remove Name
+//////////////////////////////////////////////////
+const markAsAbsent = (id, nameIndex, currentAbsentState) => {
+	$.ajax({
+		url: `/squads/data/${id}/${nameIndex}/${currentAbsentState}`,
+		type: 'PUT',
+		success: data => {
+			namesArrayOfObjects(squadID);
+		},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
 		}
 	});
 };

@@ -71,6 +71,68 @@ squad.get('/data/:id/names', (req, res) => {
 });
 
 //////////////////////////////////////////////////
+// REMOVE PERSON FROM SQUAD
+//////////////////////////////////////////////////
+squad.delete('/data/:id/:nameIndex', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		let updatedSquad = foundSquad;
+
+		console.log(`nameIndex is $(req.params.nameIndex)`);
+
+		updatedSquad.names[req.params.nameIndex].archived = true;
+
+		squadModel.findByIdAndUpdate(
+			req.params.id,
+			updatedSquad,
+			(error, updatedFoundSquad) => {
+				if (err) {
+					console.log(err);
+				}
+				res.send('successfully removed name');
+
+				console.log(updatedFoundSquad);
+			}
+		);
+	});
+});
+
+//////////////////////////////////////////////////
+// MARK PERSON AS ABSENT/NOT ABSENT IN SQUAD
+//////////////////////////////////////////////////
+squad.put('/data/:id/:nameIndex/:absent', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		let updatedSquad = foundSquad;
+
+		console.log(`nameIndex is ${req.params.nameIndex}`);
+		console.log(
+			`Absent is ${req.params.absent} and is type ${typeof req.params.absent}`
+		);
+
+		if (req.params.absent === 'true') {
+			updatedSquad.names[req.params.nameIndex].absent = false;
+		} else if (req.params.absent === 'false') {
+			updatedSquad.names[req.params.nameIndex].absent = true;
+		}
+
+		console.log('Updated squad prior to pushing into the db:');
+		console.log(updatedSquad);
+
+		squadModel.findByIdAndUpdate(
+			req.params.id,
+			updatedSquad,
+			(error, updatedFoundSquad) => {
+				if (err) {
+					console.log(err);
+				}
+				res.send('successfully removed name');
+
+				// console.log(updatedFoundSquad);
+			}
+		);
+	});
+});
+
+//////////////////////////////////////////////////
 // MAKE RANDOM GROUPS
 //////////////////////////////////////////////////
 squad.get('/randomize/:size/:id', (req, res) => {

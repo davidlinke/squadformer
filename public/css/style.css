@@ -4,6 +4,7 @@
 :root {
 	--main-color: #9f9f9f;
 	--main-darker-color: #4a4a4a;
+	--main-lighter-color: #d3d3d3;
 	--contrast-color: #faf4ed;
 	--main-highlight-color: #848484;
 	--contrast-highlight-color: #ede9e4;
@@ -276,6 +277,8 @@ select:focus {
 	justify-content: space-evenly;
 	align-items: flex-start;
 	align-content: flex-start;
+	/* border: 0.1rem solid var(--main-color); */
+	border-radius: 0.4rem;
 }
 
 .nameDiv {
@@ -286,6 +289,8 @@ select:focus {
 	display: block;
 	background-color: var(--contrast-color);
 	align-self: flex-start;
+	/* border: 0.1rem solid var(--main-color); */
+	border-radius: 0.4rem;
 }
 
 #combinationsDiv {
@@ -399,10 +404,15 @@ input[type='number'] {
 
 .tooltipButton {
 	color: var(--green);
+	margin: 0;
 }
 .divider {
+	/* position: absolute; */
 	display: inline;
 	color: var(--main-color);
+	/* border: solid 0.5px red; */
+	/* margin-right: -10px; */
+	/* height: 25px; */
 }
 
 #markNameAbsent {
@@ -419,4 +429,13 @@ input[type='number'] {
 
 #removeName:hover {
 	color: var(--main-color);
+}
+
+#divForNames {
+	padding: 0;
+	margin: 0;
+}
+
+#absent {
+	color: var(--main-lighter-color);
 }
