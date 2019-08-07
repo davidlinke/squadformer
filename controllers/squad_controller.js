@@ -35,14 +35,26 @@ squad.get('/data/:id/squadname', (req, res) => {
 });
 
 //////////////////////////////////////////////////
-// GET SQUAD NAME
+// UPDATE SQUAD NAME
 //////////////////////////////////////////////////
-squad.put('/data/:id/squadname', (req, res) => {
-	squadModel.findByIdAndUpdate(req.params.id, (err, foundSquad) => {
-		if (err) {
-			console.log(err);
-		}
-		res.send(foundSquad.squadName);
+squad.put('/data/:id/:squadname', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		let updatedSquad = foundSquad;
+
+		updatedSquad.squadName = req.params.squadname;
+
+		squadModel.findByIdAndUpdate(
+			req.params.id,
+			updatedSquad,
+			(error, updatedFoundSquad) => {
+				if (err) {
+					console.log(err);
+				}
+				res.send(updatedFoundSquad.squadName);
+
+				console.log(updatedFoundSquad);
+			}
+		);
 	});
 });
 

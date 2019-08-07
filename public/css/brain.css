@@ -235,7 +235,7 @@
 .groupAnimation {
 	animation-timing-function: ease-in-out;
 	animation-duration: 30s;
-	animation-iteration-count: 3;
+	animation-iteration-count: 60; /* stop animating after 30min */
 }
 
 #c1 {

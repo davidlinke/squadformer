@@ -50,29 +50,58 @@ const saveGroupsToDB = (id, groups) => {
 };
 
 //////////////////////////////////////////////////
+// Update Squad Name
+//////////////////////////////////////////////////
+const updateSquadName = (id, newName) => {
+	$.ajax({
+		url: `/squads/data/${id}/${newName}`,
+		type: 'PUT'
+	});
+};
+
+//////////////////////////////////////////////////
 // Display Squad Name
 //////////////////////////////////////////////////
 const showSquadName = name => {
+	const $names = $('<div>').attr('id', 'namesContainer');
+	$('#squadDiv').prepend($names);
 	const $squadNameDiv = $('<div>').attr('id', 'squadNameDiv');
-	$('.pageContainer').prepend($squadNameDiv);
-	const $squadName = $('<h3>').text(name);
+	$('#namesContainer').prepend($squadNameDiv);
+	const $squadName = $('<h3>')
+		.text(name)
+		.attr('contenteditable', 'false')
+		.attr('id', 'squadTitle');
 	$squadNameDiv.append($squadName);
+
+	// showNameEdit();
+};
+
+//////////////////////////////////////////////////
+// Display Edit Icon
+//////////////////////////////////////////////////
+const showNameEdit = () => {
+	const $editIcon = $('<object>')
+		.attr('type', 'image/svg+xml')
+		.attr('data', '/images/edit.svg')
+		.attr('id', 'editNameIcon');
+	$('#squadNameDiv').append($editIcon);
 };
 
 //////////////////////////////////////////////////
 // Displays Names On The Page
 //////////////////////////////////////////////////
 const showNames = namesArray => {
-	const $names = $('<div>').attr('id', 'namesContainer');
-	$('#main').prepend($names);
 	namesArray.forEach((nameObject, nameIndex) => {
 		const $nameDiv = $('<div>')
-			.attr('id', 'individualNamesContainer')
+			.attr('class', 'individualNamesContainer')
 			.attr('nameIndex', nameIndex);
-		$names.append($nameDiv);
+		$('#namesContainer').append($nameDiv);
 		const $newName = $('<p>').text(nameObject.name);
 		$nameDiv.append($newName);
 	});
+
+	editSquadNameMenu();
+	editPeopleMenu();
 };
 
 //////////////////////////////////////////////////
@@ -80,7 +109,7 @@ const showNames = namesArray => {
 //////////////////////////////////////////////////
 const showGroupForm = () => {
 	const $showGroupFormDiv = $('<div>').attr('id', 'showGroupForm');
-	$('#main').append($showGroupFormDiv);
+	$('#squadDiv').append($showGroupFormDiv);
 	const $titlediv = $('<div>').attr('id', 'generateGroupsTitleDiv');
 	$showGroupFormDiv.append($titlediv);
 	const $title = $('<h3>').text('Generate Random Groups');
@@ -109,7 +138,8 @@ const showGroupForm = () => {
 	const $submit = $('<input>')
 		.attr('type', 'submit')
 		.attr('id', 'groupSizeSubmit')
-		.attr('value', 'Build Groups');
+		.attr('value', 'Build Groups')
+		.attr('class', 'buttonFillColor');
 	$buildGroupsButtonDiv.append($submit);
 
 	groupButtonListener();
@@ -125,7 +155,7 @@ const groupButtonListener = () => {
 		if ($form.get(0).reportValidity()) {
 			let size = $('#groupSize').val();
 			getCombinations(squadID, size);
-			$('#combinationsDiv').remove();
+			$('#showCombinationsParentDiv').remove();
 			$('#saveGroupsForm').remove();
 		} else {
 			$form.get(0).reportValidity(); //Need to display validity message
@@ -139,6 +169,8 @@ const groupButtonListener = () => {
 const groupSaveButtonListener = () => {
 	$('#groupSaveSubmit').on('click', () => {
 		saveGroupsToDB(squadID, saveGroups());
+		$('#showCombinationsParentDiv').remove();
+		alert('Groups Saved!');
 	});
 };
 
@@ -163,8 +195,13 @@ const getCombinations = (id, size) => {
 // Show group combinations
 //////////////////////////////////////////////////
 const showCombinations = arrayOfGroups => {
+	const $showCombinationsParentDiv = $('<div>').attr(
+		'id',
+		'showCombinationsParentDiv'
+	);
 	const $combinationsDiv = $('<div>').attr('id', 'combinationsDiv');
-	$('#main').append($($combinationsDiv));
+	$('#main').append($($showCombinationsParentDiv));
+	$showCombinationsParentDiv.append($($combinationsDiv));
 	arrayOfGroups.groups.forEach(group => {
 		const $div = $('<div>');
 		$div.attr('class', 'draggableContainer');
@@ -179,7 +216,7 @@ const showCombinations = arrayOfGroups => {
 	});
 
 	const $saveGroupsDiv = $('<div>').attr('id', 'saveGroupsForm');
-	$('#main').append($saveGroupsDiv);
+	$showCombinationsParentDiv.append($saveGroupsDiv);
 
 	const $form = $('<form>')
 		.attr('id', 'saveGroupForm')
@@ -193,6 +230,14 @@ const showCombinations = arrayOfGroups => {
 	$form.append($submit);
 
 	groupSaveButtonListener();
+
+	//Scroll to created groups
+	$('html, body').animate(
+		{
+			scrollTop: $('#showCombinationsParentDiv').offset().top
+		},
+		500
+	);
 
 	// Initialize dragging
 	dragging();
@@ -238,3 +283,102 @@ const dragging = () => {
 squadName(squadID);
 namesArrayOfObjects(squadID);
 showGroupForm();
+
+//////////////////////////////////////////////////
+// Edit Squad Names Menu
+//////////////////////////////////////////////////
+const editSquadNameMenu = () => {
+	const ref = $('#squadTitle');
+	const popup = $('#editTitlePopup');
+	// const popup = $('#editNamesPopup');
+
+	popup.hide();
+
+	editTitleListener();
+
+	ref.click(function() {
+		if (
+			popup.is(':visible') &&
+			$('#squadTitle').attr('contenteditable') === 'false'
+		) {
+			popup.hide();
+		} else {
+			popup.show();
+			var popper = new Popper(ref, popup, {
+				placement: 'right',
+				onCreate: function(data) {
+					// console.log(data);
+				},
+				modifiers: {
+					offset: {
+						enabled: true,
+						offset: '0,20'
+					}
+				}
+			});
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Edit Squad Names Listener
+//////////////////////////////////////////////////
+const editTitleListener = () => {
+	$('#startTitleEdit').on('click', () => {
+		if ($('#startTitleEdit').text() === 'edit') {
+			// Edit State, switch to save
+			// console.log('editing state');
+			$('#startTitleEdit').text('save');
+			$('#squadTitle').attr('contenteditable', 'true');
+			$('#squadTitle').focus();
+		} else {
+			//Save State
+			// console.log('save state');
+			$('#startTitleEdit').text('edit');
+			$('#squadTitle').attr('contenteditable', 'false');
+			$('#squadTitle').blur(); /* Unfocuses */
+			$('#editTitlePopup').hide();
+
+			const newTitle = $('#squadTitle').text();
+			updateSquadName(squadID, newTitle);
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Edit People Menu
+//////////////////////////////////////////////////
+const editPeopleMenu = () => {
+	$('.individualNamesContainer').click(function() {});
+
+	const ref = $('.individualNamesContainer');
+	const popup = $('#editNamesPopup');
+
+	popup.hide();
+
+	// editTitleListener();
+
+	ref.click(function() {
+		console.log(this);
+		if (
+			popup.is(':visible') &&
+			$('#squadTitle').attr('contenteditable') === 'false'
+		) {
+			popup.hide();
+		} else {
+			popup.show();
+			var popper = new Popper(ref, popup, {
+				placement: 'right',
+				onCreate: function(data) {
+					// console.log(data);
+				},
+				modifiers: {
+					offset: {
+						enabled: true,
+						offset: '0,20'
+					}
+				}
+			});
+		}
+	});
+};

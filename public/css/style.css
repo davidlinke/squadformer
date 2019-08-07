@@ -19,7 +19,7 @@
 
 .pageContainer {
 	max-width: 1200px;
-	margin: 0 auto;
+	margin: 3% auto 0 auto;
 	padding: 0 5%;
 }
 
@@ -96,28 +96,13 @@ h3 {
 	margin: 1% auto;
 }
 
-.buttonFill {
-	background-color: var(--contrast-color);
-	border-color: var(--contrast-color);
-	color: var(--main-color);
-}
-
-.buttonFill:hover {
-	background-color: var(--green);
-	border-color: var(--green);
-	color: var(--contrast-color);
-}
-
-.buttonImportant {
-	color: var(--green);
-}
-
 button {
 	width: 20vw;
 }
 
 footer {
 	text-align: center;
+	margin-top: 5%;
 }
 
 #homefooter {
@@ -241,32 +226,44 @@ select:focus {
 }
 
 #namesContainer {
-	background-color: var(--main-color);
+	/* background-color: var(--main-color); */
+	border: 1px solid var(--main-color);
+	border-radius: 0.4rem;
 	display: flex;
-	flex-wrap: wrap;
-	padding: 1%;
+	/* flex-wrap: wrap; */
+	flex-direction: column;
+	/* padding: 1%; */
+	padding: 2vw 6vw;
 	justify-content: space-evenly;
+	width: 42.5vw;
+	margin-right: 1vw;
 }
 
-#individualNamesContainer {
-	background-color: var(--contrast-color);
+.individualNamesContainer {
+	/* background-color: var(--contrast-color); */
 	color: var(--main-color);
 	font-weight: 400;
-	width: 20%;
-	min-width: 200px;
-	margin: 1%;
-	padding: 1%;
+	width: 50%;
+	/* min-width: 200px; */
+	/* margin: 1%; */
+	/* padding: 1%; */
+	cursor: pointer;
 }
 
-#individualNamesContainer p {
+.individualNamesContainer p {
 	margin: 0;
 	padding: 0;
-	font-family: 'Oswald', sans-serif;
+	/* font-family: 'Oswald', sans-serif; */
 }
 
 #showGroupForm {
-	margin-top: 4%;
-	padding: 0 30%;
+	/* margin-top: 4%; */
+	/* padding: 0 30%; */
+	padding: 2vw 6vw;
+	width: 42.5vw;
+	border: 1px solid var(--main-color);
+	border-radius: 0.4rem;
+	margin-left: 1vw;
 }
 
 .draggableContainer {
@@ -295,7 +292,7 @@ select:focus {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
-	padding: 1vw;
+	/* padding: 1vw; */
 }
 
 #buildGroupsButtonDiv,
@@ -303,4 +300,123 @@ select:focus {
 #squadNameDiv,
 #generateGroupsTitleDiv {
 	text-align: center;
+}
+
+#squadDiv {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	/* flex-wrap: wrap; */
+}
+
+.buttonFill {
+	background-color: var(--contrast-color);
+	border-color: var(--contrast-color);
+	color: var(--main-color);
+}
+
+.buttonFill:hover {
+	background-color: var(--green);
+	border-color: var(--green);
+	color: var(--contrast-color);
+}
+
+.buttonImportant {
+	color: var(--green);
+}
+
+#groupSizeSubmit {
+	margin-top: 5%;
+}
+
+#groupSizeSubmit {
+	background-color: var(--green);
+	border-color: var(--green);
+	color: var(--contrast-color);
+}
+
+#groupSizeSubmit:hover {
+	background-color: var(--contrast-color);
+	border-color: var(--green);
+	color: var(--green);
+}
+
+/* .buttonFillColor {
+	background-color: var(--green);
+	border-color: var(--green);
+	color: var(--contrast-color);
+}
+
+.buttonFillColor:hover {
+	background-color: var(--contrast-color);
+	border-color: var(--green);
+	color: var(--green);
+} */
+
+/* HIDE ARROWS ON NUMBER INPUT FIELD */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
+#showCombinationsParentDiv {
+	margin-top: 5%;
+	border: 1px solid var(--main-color);
+	border-radius: 0.4rem;
+}
+
+#editNameIcon {
+	display: inline-block;
+	width: 20px;
+	margin-left: 1vw;
+	/* padding-top: 10px; */
+	/* position: absolute;
+	transform: translate(15vw, -5vw); */
+	pointer-events: none; /* need this to make link clickable on object */
+	cursor: crosshair;
+}
+
+#squadTitle {
+	display: inline-block;
+	cursor: pointer;
+}
+
+.tooltipDiv {
+	cursor: pointer;
+	border: 1px solid var(--main-color);
+	border-radius: 0.4rem;
+	height: 25px;
+	line-height: 23px;
+	padding: 0 10px;
+	font-size: 1.2rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.tooltipButton {
+	color: var(--green);
+}
+.divider {
+	display: inline;
+	color: var(--main-color);
+}
+
+#markNameAbsent {
+	color: var(--blue);
+}
+
+#markNameAbsent:hover {
+	color: var(--main-color);
+}
+
+#removeName {
+	color: var(--salmon);
+}
+
+#removeName:hover {
+	color: var(--main-color);
 }

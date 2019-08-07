@@ -9,6 +9,8 @@
 			crossorigin="anonymous"
 		></script>
 		<script defer src="/js/dragula.js"></script>
+		<script defer src="/js/popper.js"></script>
+		<!-- <script defer src="/js/tooltip.min.js"></script> -->
 		<script defer src="/js/viewSquad.js"></script>
 		<style>
 			#squadIndex {
@@ -20,10 +22,22 @@
 		<% include partials/header.ejs %>
 		<div class="pageContainer">
 			<div id="squadIndex"><%= foundSquad.id %></div>
-			<div id="main"></div>
+			<div id="main">
+				<div id="squadDiv"></div>
+			</div>
 			<footer>
 				<% include partials/footer.ejs %>
 			</footer>
+			<div id="editTitlePopup" class="tooltipDiv">
+				<a class="tooltipButton" id="startTitleEdit">edit</a>
+			</div>
+			<div id="editNamesPopup" class="tooltipDiv">
+				<a class="tooltipButton" id="markNameAbsent">mark absent</a>
+				<div class="divider">|</div>
+				<a class="tooltipButton" id="editName">edit</a>
+				<div class="divider">|</div>
+				<a class="tooltipButton" id="removeName">remove</a>
+			</div>
 		</div>
 	</body>
 </html>
