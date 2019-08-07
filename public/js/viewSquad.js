@@ -77,7 +77,7 @@ const showSquadName = name => {
 		.attr('id', 'squadTitle');
 	$squadNameDiv.append($squadName);
 
-	// showNameEdit();
+	namesArrayOfObjects(squadID);
 };
 
 //////////////////////////////////////////////////
@@ -299,7 +299,6 @@ const dragging = () => {
 
 // CALL FUNCTIONS
 squadName(squadID);
-namesArrayOfObjects(squadID);
 showGroupForm();
 
 //////////////////////////////////////////////////
