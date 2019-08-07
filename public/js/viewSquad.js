@@ -4,6 +4,9 @@ let selectedNameIndex = 0;
 let selectedNameAbsentState = false;
 let listenerNameState = false;
 
+$('#editTitlePopup').hide();
+$('#editNamesPopup').hide();
+
 //////////////////////////////////////////////////
 // Upon Visiting Page, Store ID in Local Storage
 //////////////////////////////////////////////////
