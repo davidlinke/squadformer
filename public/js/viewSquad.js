@@ -13,6 +13,37 @@ $('#editNamesPopup').hide();
 localStorage.setItem('squad', squadID);
 
 //////////////////////////////////////////////////
+// Add URL to page
+//////////////////////////////////////////////////
+const currentURL = window.location.href;
+const $urlText = $('<p>').text(`Bookmark or `);
+
+$urlText.append(`<a id="save">save</a>`);
+$urlText.append(' this page to return to your squad.');
+
+$('#currentURL').append($urlText);
+
+const copyURLListener = () => {
+	$('#save').on('click', () => {
+		// Adapted from https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery
+		function copyToClipboard(text) {
+			var $temp = $('<input>')
+				.attr('value', text)
+				.attr('id', 'tempCopy');
+			$('body').append($temp);
+			$temp.select();
+			document.execCommand('copy');
+			$temp.remove();
+			alert('Copied squad page URL to clipboard.');
+		}
+
+		copyToClipboard(String(currentURL));
+	});
+};
+
+copyURLListener();
+
+//////////////////////////////////////////////////
 // Gets Squad Name
 //////////////////////////////////////////////////
 const squadName = id => {
@@ -102,6 +133,7 @@ const showNameEdit = () => {
 //////////////////////////////////////////////////
 const showNames = namesArray => {
 	$('#divForNames').remove();
+	$('#addNameDiv').remove();
 	const $divForNames = $('<div>').attr('id', 'divForNames');
 	$('#namesContainer').append($divForNames);
 
@@ -124,8 +156,100 @@ const showNames = namesArray => {
 		}
 	});
 
+	showAddNameButton();
 	editSquadNameMenu();
 	editPeopleMenu();
+};
+
+//////////////////////////////////////////////////
+// Displays Add New Name Button On The Page
+//////////////////////////////////////////////////
+const showAddNameButton = () => {
+	const $addNameDiv = $('<div>').attr('id', 'addNameDiv');
+	$('#namesContainer').append($addNameDiv);
+
+	const $button = $('<a>')
+		.text('Add Name')
+		.attr('id', 'addName');
+	$addNameDiv.append($button);
+
+	// Start listener
+	addNameListener();
+};
+
+//////////////////////////////////////////////////
+// Displays Add New Name Form On Page
+//////////////////////////////////////////////////
+const showAddNameForm = () => {
+	const $addNameFormDiv = $('<div>').attr('id', 'addNameFormDiv');
+	$('#addNameDiv').append($addNameFormDiv);
+
+	const $form = $('<form>')
+		.attr('onsubmit', 'return false')
+		.attr('id', 'addNameForm');
+	$addNameFormDiv.append($form);
+
+	const $input = $('<input>')
+		.attr('type', 'text')
+		.attr('id', 'newName')
+		.attr('placeholder', 'Name')
+		.prop('required', true);
+	$form.append($input);
+
+	const $buildGroupsButtonDiv = $('<div>').attr('id', 'buildGroupsButtonDiv');
+	$form.append($buildGroupsButtonDiv);
+
+	const $submit = $('<input>')
+		.attr('type', 'submit')
+		.attr('id', 'submitNewName')
+		.attr('value', 'Add Name To Squad')
+		.attr('class', 'buttonFillColor');
+	$buildGroupsButtonDiv.append($submit);
+
+	submitNewNameListener();
+};
+
+//////////////////////////////////////////////////
+// Add Name Listener
+//////////////////////////////////////////////////
+const addNameListener = () => {
+	$('#addName').on('click', () => {
+		$('#addName').hide();
+		showAddNameForm();
+	});
+};
+
+//////////////////////////////////////////////////
+// Submit New Name Listener
+//////////////////////////////////////////////////
+const submitNewNameListener = () => {
+	$('#submitNewName').on('click', () => {
+		const $form = $('#addNameForm');
+		// If form passes validation
+		if ($form.get(0).reportValidity()) {
+			const inputtedName = document.getElementById('newName').value; //jQuery .val would not work here for some reason
+
+			addNewName(squadID, inputtedName);
+
+			$('#addName').show();
+			$('#addNameFormDiv').remove();
+		} else {
+			$form.get(0).reportValidity(); //Need to display validity message
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Post New Name
+//////////////////////////////////////////////////
+const addNewName = (id, name) => {
+	$.ajax({
+		url: `/squads/data/${id}/${name}`,
+		type: 'POST',
+		success: data => {
+			namesArrayOfObjects(squadID);
+		}
+	});
 };
 
 //////////////////////////////////////////////////

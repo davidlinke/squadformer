@@ -21,6 +21,7 @@ squad.get('/:id', (req, res) => {
 		}
 		res.render('viewSquad.ejs', {
 			foundSquad: foundSquad
+			// window: window
 		});
 	});
 });
@@ -88,6 +89,39 @@ squad.get('/data/:id/names', (req, res) => {
 			console.log(err);
 		}
 		res.send(foundSquad.names);
+	});
+});
+
+//////////////////////////////////////////////////
+// ADD NEW PERSON TO SQUAD
+//////////////////////////////////////////////////
+squad.post('/data/:id/:name', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		// console.log(foundSquad);
+		// console.log('New Name Is: ' + req.params.name);
+
+		const newPerson = {
+			name: req.params.name,
+			absent: false,
+			archived: false
+		};
+
+		const updatedSquad = foundSquad;
+
+		updatedSquad.names.push(newPerson);
+
+		// console.log(foundSquad);
+
+		squadModel.findByIdAndUpdate(
+			req.params.id,
+			updatedSquad,
+			(error, updatedFoundSquad) => {
+				if (err) {
+					console.log(err);
+				}
+				res.send('success');
+			}
+		);
 	});
 });
 

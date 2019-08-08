@@ -247,6 +247,7 @@ select:focus {
 	font-weight: 400;
 	width: 50%;
 	cursor: pointer;
+	margin-bottom: 0.2rem;
 }
 
 .individualNamesContainer p {
@@ -325,17 +326,20 @@ select:focus {
 }
 
 #groupSizeSubmit,
-#groupSaveSubmit {
+#groupSaveSubmit,
+#submitNewName {
 	margin-top: 5%;
 }
 
-#groupSizeSubmit {
+#groupSizeSubmit,
+#submitNewName {
 	background-color: var(--green);
 	border-color: var(--green);
 	color: var(--contrast-color);
 }
 
-#groupSizeSubmit:hover {
+#groupSizeSubmit:hover,
+#submitNewName:hover {
 	background-color: var(--contrast-color);
 	border-color: var(--green);
 	color: var(--green);
@@ -499,4 +503,31 @@ input {
 
 .individualGroupInner {
 	margin-top: 2.5rem;
+}
+
+#addNameDiv {
+	text-align: center;
+}
+
+#addName {
+	cursor: pointer;
+}
+
+#addNameFormDiv {
+	margin-top: 5rem;
+}
+
+#currentURL {
+	text-align: center;
+	margin-top: 5%;
+}
+
+#currentURL p {
+	display: inline;
+}
+
+#currentURL a {
+	font-family: 'Josefin Slab', serif;
+	/* font-weight: 700; */
+	cursor: pointer;
 }
