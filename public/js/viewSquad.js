@@ -132,6 +132,8 @@ const showNameEdit = () => {
 // Displays Names On The Page
 //////////////////////////////////////////////////
 const showNames = namesArray => {
+	let nameCount = 0;
+
 	$('#divForNames').remove();
 	$('#addNameDiv').remove();
 	const $divForNames = $('<div>').attr('id', 'divForNames');
@@ -148,6 +150,7 @@ const showNames = namesArray => {
 				$nameDiv.attr('id', 'absent');
 			} else {
 				$nameDiv.attr('absent', 'false');
+				nameCount++;
 			}
 
 			$divForNames.append($nameDiv);
@@ -159,6 +162,8 @@ const showNames = namesArray => {
 	showAddNameButton();
 	editSquadNameMenu();
 	editPeopleMenu();
+
+	showEvenGroupSizes(calculateGroupNumbers(nameCount));
 };
 
 //////////////////////////////////////////////////
@@ -688,3 +693,79 @@ const getGroupsHistory = id => {
 };
 
 getGroupsHistory(squadID);
+
+//////////////////////////////////////////////////
+// Calculate Common Group Count Divisibly By Integers
+//////////////////////////////////////////////////
+const calculateGroupNumbers = count => {
+	let countArray = [];
+	if (count === 0) {
+		return '0';
+	} else if (count === 1) {
+		return '1';
+	}
+
+	if (count % 2 === 0) {
+		countArray.push('2');
+	}
+	if (count % 3 === 0) {
+		countArray.push('3');
+	}
+	if (count % 4 === 0) {
+		countArray.push('4');
+	}
+	if (count % 5 === 0) {
+		countArray.push('5');
+	}
+	if (count % 6 === 0) {
+		countArray.push('6');
+	}
+	if (count % 7 === 0) {
+		countArray.push('7');
+	}
+	if (count % 8 === 0) {
+		countArray.push('8');
+	}
+	if (count % 9 === 0) {
+		countArray.push('9');
+	}
+	if (count % 10 === 0) {
+		countArray.push('10');
+	}
+
+	let countString = '';
+	for (let i = 0; i < countArray.length; i++) {
+		if (i === 0) {
+			countString += countArray[i];
+		} else if (i < countArray.length - 1) {
+			countString += `, ${countArray[i]}`;
+		} else if (i === countArray.length - 1 && countArray.length > 2) {
+			countString += `, and ${countArray[i]}`;
+		} else if (i === countArray.length - 1 && countArray.length === 2) {
+			countString += ` and ${countArray[i]}`;
+		}
+	}
+
+	return countString;
+};
+
+//////////////////////////////////////////////////
+// Show Even Group Sizes
+//////////////////////////////////////////////////
+const showEvenGroupSizes = string => {
+	$('#evenGroupSizesTitle').remove();
+
+	if (string !== '') {
+		const $sizes = $('<h5>')
+			.text('Even Group Sizes: ')
+			.attr('id', 'evenGroupSizesTitle');
+
+		// $sizes.append(`<span id="boldH5">`);
+		// $sizes.append(string);
+		// $sizes.append(`</span>`);
+
+		$sizes.append(`<span class="boldH5">${string}</span>`);
+
+		$('#generateGroupsTitleDiv').append($sizes);
+	}
+};
