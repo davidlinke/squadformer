@@ -94,21 +94,18 @@ h3 {
 	text-align: center;
 }
 
+button {
+	width: 20vw;
+}
+
 .homeButton {
 	display: block;
 	margin: 1% auto;
 }
 
-button {
-	width: 20vw;
-}
-
 footer {
 	text-align: center;
 	margin-top: 5%;
-}
-
-#homefooter {
 }
 
 #madeBy {
@@ -136,6 +133,7 @@ a:hover {
 
 #createTextArea {
 	height: 300px;
+	color: var(--main-color);
 }
 
 #newSquadForm {
@@ -530,4 +528,83 @@ input {
 	font-family: 'Josefin Slab', serif;
 	/* font-weight: 700; */
 	cursor: pointer;
+}
+
+@media only screen and (max-width: 900px) {
+	#brainButtons {
+		position: relative;
+		width: 100%;
+		top: 59%;
+		left: 0;
+		right: 0;
+		z-index: 1;
+		text-align: center;
+	}
+
+	.homeButton {
+		width: 60%;
+	}
+
+	.buttonFill {
+		background-color: var(--main-color);
+		border-color: var(--main-color);
+		color: var(--contrast-color);
+	}
+
+	.buttonImportant {
+		background-color: var(--green);
+		border-color: var(--green);
+	}
+
+	.buttonImportant:hover {
+		background-color: var(--main-color);
+		border-color: var(--main-color);
+	}
+
+	:root {
+		--top-shape-position: 30%;
+		--bottom-shape-position: 42%;
+	}
+
+	#createForm {
+		margin-top: 5%;
+		padding: 0 25%;
+	}
+}
+
+@media only screen and (max-width: 450px) {
+	#headings {
+		position: relative;
+		margin: 5% 0;
+	}
+
+	h1,
+	h2 {
+		color: var(--main-color);
+		margin: 0;
+		padding: 0;
+	}
+
+	h1 {
+		font-size: 12vw;
+		font-weight: 600;
+	}
+
+	h2 {
+		font-weight: 200;
+		font-size: 4vw;
+	}
+	.bold {
+		color: var(--main-color);
+	}
+
+	:root {
+		--top-shape-position: 42%;
+		--bottom-shape-position: 54%;
+	}
+
+	#createForm {
+		margin-top: 10%;
+		padding: 0 5%;
+	}
 }
