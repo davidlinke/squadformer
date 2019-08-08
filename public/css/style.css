@@ -465,14 +465,8 @@ input {
 
 .individualGroupOuter {
 	width: 30%;
-	/* background: var(--main-color); */
 	margin: 2% 0;
-	/* display: flex;
-	flex-wrap: wrap; */
 	padding: 1vw;
-	/* justify-content: space-evenly;
-	align-items: flex-start;
-	align-content: flex-start; */
 	border: 0.1rem solid var(--main-color);
 	border-radius: 0.4rem;
 }
@@ -572,6 +566,33 @@ input {
 	}
 }
 
+@media only screen and (max-width: 760px) {
+	#squadDiv {
+		flex-direction: column;
+	}
+
+	#namesContainer {
+		width: 90vw;
+		padding: 6vw;
+		margin: 5% 0;
+	}
+
+	#showGroupForm {
+		padding: 6vw;
+		width: 90vw;
+		margin: 5% 0;
+	}
+
+	.draggableContainer,
+	.individualGroupOuter {
+		width: 46%;
+	}
+
+	#combinationsTitleDiv {
+		margin-top: 5%;
+	}
+}
+
 @media only screen and (max-width: 450px) {
 	#headings {
 		position: relative;
@@ -610,5 +631,10 @@ input {
 
 	#tagline {
 		font-weight: 400;
+	}
+
+	.draggableContainer,
+	.individualGroupOuter {
+		width: 90%;
 	}
 }
