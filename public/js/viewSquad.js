@@ -134,8 +134,16 @@ const showNameEdit = () => {
 const showNames = namesArray => {
 	let nameCount = 0;
 
-	$('#divForNames').remove();
-	$('#addNameDiv').remove();
+	// If exists, remove
+	if ($('#divForNames').length) {
+		$('#divForNames').remove();
+	}
+
+	// If exists, remove
+	if ($('#addNameDiv').length) {
+		$('#addNameDiv').remove();
+	}
+
 	const $divForNames = $('<div>').attr('id', 'divForNames');
 	$('#namesContainer').append($divForNames);
 
@@ -308,8 +316,16 @@ const groupButtonListener = () => {
 		if ($form.get(0).reportValidity()) {
 			let size = $('#groupSize').val();
 			getCombinations(squadID, size);
-			$('#showCombinationsParentDiv').remove();
-			$('#saveGroupsForm').remove();
+
+			// If exists, remove
+			if ($('#showCombinationsParentDiv').length) {
+				$('#showCombinationsParentDiv').remove();
+			}
+
+			// If exists, remove
+			if ($('#saveGroupsForm').length) {
+				$('#saveGroupsForm').remove();
+			}
 		} else {
 			$form.get(0).reportValidity(); //Need to display validity message
 		}
@@ -647,7 +663,10 @@ const markAsAbsent = (id, nameIndex, currentAbsentState) => {
 // Show Groups History
 //////////////////////////////////////////////////
 const showGroupsHistory = groupsObject => {
-	$('#groupHistoryDiv').remove();
+	// If exists, remove
+	if ($('#groupHistoryDiv').length) {
+		$('#groupHistoryDiv').remove();
+	}
 
 	if (groupsObject.length > 0) {
 		const $groupHistoryDiv = $('<div>').attr('id', 'groupHistoryDiv');
@@ -753,16 +772,15 @@ const calculateGroupNumbers = count => {
 // Show Even Group Sizes
 //////////////////////////////////////////////////
 const showEvenGroupSizes = string => {
-	$('#evenGroupSizesTitle').remove();
+	// If exists, remove
+	if ($('#evenGroupSizesTitle').length) {
+		$('#evenGroupSizesTitle').remove();
+	}
 
 	if (string !== '') {
 		const $sizes = $('<h5>')
 			.text('Even Group Sizes: ')
 			.attr('id', 'evenGroupSizesTitle');
-
-		// $sizes.append(`<span id="boldH5">`);
-		// $sizes.append(string);
-		// $sizes.append(`</span>`);
 
 		$sizes.append(`<span class="boldH5">${string}</span>`);
 
