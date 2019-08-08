@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<% include partials/head.ejs %>
+		<script src="/js/moment.js"></script>
+	</head>
+	<body>
+		<% include partials/header.ejs %>
+		<div class="pageContainer">
+			<div class="titleContainer">
+				<h3><%= squadName %></h3>
+				<!-- Format Date -->
+				<% const time = moment(`${pastGroup.createdAt}`); %> <% const
+				formattedTime = time.format('MMMM Do YYYY, h:mm a'); %>
+				<h5 id="groupFormDate">
+					Groups formed on <span class="boldTime"><%= formattedTime %></span>
+				</h5>
+			</div>
+
+			<div class="viewGroupsContainer">
+				<% pastGroup.pastGroupCombinations.forEach(parent => { %>
+				<div class="individualGroupOuter">
+					<div class="individualGroupTitle">
+						<h4><%= parent.groupName %></h4>
+					</div>
+					<div class="individualGroupInner">
+						<% parent.group.forEach(index => { %> <% const name =
+						names[index].name %>
+						<p><%= name %></p>
+						<% }) %>
+					</div>
+				</div>
+				<% }) %>
+			</div>
+			<footer>
+				<% include partials/footer.ejs %>
+			</footer>
+		</div>
+	</body>
+</html>

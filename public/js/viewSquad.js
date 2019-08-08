@@ -52,7 +52,10 @@ const saveGroupsToDB = (id, groups) => {
 	$.ajax({
 		url: `/squads/savegroups/${id}`,
 		data: { groups: JSON.stringify(groups) },
-		type: 'POST'
+		type: 'POST',
+		success: data => {
+			getAddedGroupIndexAndRedirect(squadID);
+		}
 	});
 };
 
@@ -189,9 +192,27 @@ const groupButtonListener = () => {
 //////////////////////////////////////////////////
 const groupSaveButtonListener = () => {
 	$('#groupSaveSubmit').on('click', () => {
+		// Save group to database
 		saveGroupsToDB(squadID, saveGroups());
-		$('#showCombinationsParentDiv').remove();
-		alert('Groups Saved!');
+
+		// getAddedGroupIndexAndRedirect(squadID);
+	});
+};
+
+//////////////////////////////////////////////////
+// Get last added group index and redirect to page
+//////////////////////////////////////////////////
+const getAddedGroupIndexAndRedirect = id => {
+	$.ajax({
+		url: `/squads/data/groupindex/${id}`,
+		success: data => {
+			// console.log(data);
+			// showCombinations(data);
+			window.location.href = `/squads/${squadID}/${data}`;
+		},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
+		}
 	});
 };
 
@@ -216,12 +237,37 @@ const getCombinations = (id, size) => {
 // Show group combinations
 //////////////////////////////////////////////////
 const showCombinations = arrayOfGroups => {
+	// console.log(arrayOfGroups);
 	const $showCombinationsParentDiv = $('<div>').attr(
 		'id',
 		'showCombinationsParentDiv'
 	);
+
+	const $combinationsTitleDiv = $('<div>').attr('id', 'combinationsTitleDiv');
+	$showCombinationsParentDiv.append($combinationsTitleDiv);
+
+	const $title = $('<h3>')
+		.attr('id', 'combinationsTitle')
+		.text('Randomly Generated Groups');
+	$combinationsTitleDiv.append($title);
+
+	const $subtitle = $('<h5>')
+		.attr('id', 'combinationsSubtitle')
+		.text(
+			'Groups can be customized by dragging squad members names to different groups.'
+		);
+	$combinationsTitleDiv.append($subtitle);
+
+	//DISPLAY REPEATS BADGE IF REPEATS
+	if (arrayOfGroups.repeats) {
+		const $repeats = $('<h5>')
+			.attr('id', 'combinationsRepeatMessage')
+			.text('No more unique group combinations possible.');
+		$combinationsTitleDiv.append($repeats);
+	}
+
 	const $combinationsDiv = $('<div>').attr('id', 'combinationsDiv');
-	$('#main').append($($showCombinationsParentDiv));
+	$('#squadDiv').after($($showCombinationsParentDiv));
 	$showCombinationsParentDiv.append($($combinationsDiv));
 	arrayOfGroups.groups.forEach(group => {
 		const $div = $('<div>');
@@ -346,7 +392,6 @@ const editSquadNameMenu = () => {
 // Edit Squad Names Listener
 //////////////////////////////////////////////////
 const editTitleListener = () => {
-	console.log('listener initialized');
 	$('#startTitleEdit').on('click', () => {
 		if ($('#startTitleEdit').text() === 'edit') {
 			// Edit State, switch to save
@@ -402,7 +447,7 @@ const editPeopleMenu = () => {
 		} else {
 			selectedNameIndex = Number(clickedNameIndex);
 			selectedNameAbsentState = selectedNameAbsense;
-			console.log(selectedNameIndex);
+			// console.log(selectedNameIndex);
 			popup.show();
 			var popper = new Popper(selectedName, popup, {
 				placement: 'right',
@@ -468,3 +513,54 @@ const markAsAbsent = (id, nameIndex, currentAbsentState) => {
 		}
 	});
 };
+
+//////////////////////////////////////////////////
+// Show Groups History
+//////////////////////////////////////////////////
+const showGroupsHistory = groupsObject => {
+	$('#groupHistoryDiv').remove();
+
+	if (groupsObject.length > 0) {
+		const $groupHistoryDiv = $('<div>').attr('id', 'groupHistoryDiv');
+		$('#main').append($groupHistoryDiv);
+
+		const $groupHistoryTitleDiv = $('<div>').attr('id', 'groupHistoryTitleDiv');
+		$groupHistoryDiv.append($groupHistoryTitleDiv);
+
+		const $title = $('<h3>')
+			.attr('id', 'groupHistoryTitle')
+			.text('Past Generated Groups');
+		$groupHistoryTitleDiv.append($title);
+
+		groupsObject.forEach((pastGroup, index) => {
+			// console.log(pastGroup);
+			const time = moment(`${pastGroup.createdAt}`);
+			const formattedTime = time.format('MMMM Do YYYY, h:mm a');
+
+			const $link = $('<a>')
+				.attr('href', `/squads/${squadID}/${index}`)
+				.attr('class', 'groupLink')
+				.text(formattedTime);
+
+			$groupHistoryTitleDiv.after($link);
+		});
+	}
+};
+
+//////////////////////////////////////////////////
+// Get Groups History
+//////////////////////////////////////////////////
+const getGroupsHistory = id => {
+	$.ajax({
+		url: `/squads/data/${id}/history`,
+		success: data => {
+			// console.log(data);
+			showGroupsHistory(data);
+		},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
+		}
+	});
+};
+
+getGroupsHistory(squadID);

@@ -5,6 +5,9 @@ const methodOverride = require('method-override');
 squad.use(methodOverride('_method'));
 squad.use(express.urlencoded({ extended: false }));
 
+// use moment date formatting in ejs
+const moment = require('moment');
+
 // Need below for creating objectId's to work
 let ObjectId = require('mongodb').ObjectID;
 
@@ -18,6 +21,24 @@ squad.get('/:id', (req, res) => {
 		}
 		res.render('viewSquad.ejs', {
 			foundSquad: foundSquad
+		});
+	});
+});
+
+//////////////////////////////////////////////////
+// GET VIEW SAVED GROUPS PAGE
+//////////////////////////////////////////////////
+squad.get('/:id/:groupindex', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		// console.log(foundSquad.pastGroups[req.params.groupindex]);
+		if (err) {
+			console.log(err);
+		}
+		res.render('savedGroup.ejs', {
+			squadName: foundSquad.squadName,
+			pastGroup: foundSquad.pastGroups[req.params.groupindex],
+			names: foundSquad.names,
+			moment: moment
 		});
 	});
 });
@@ -52,7 +73,7 @@ squad.put('/data/:id/:squadname', (req, res) => {
 				}
 				res.send(updatedFoundSquad.squadName);
 
-				console.log(updatedFoundSquad);
+				// console.log(updatedFoundSquad);
 			}
 		);
 	});
@@ -71,13 +92,40 @@ squad.get('/data/:id/names', (req, res) => {
 });
 
 //////////////////////////////////////////////////
+// GET PAST SQUAD GROUP HISTORY
+//////////////////////////////////////////////////
+squad.get('/data/:id/history', (req, res) => {
+	// console.log('got history request');
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		// console.log(foundSquad.pastGroups);
+		res.send(foundSquad.pastGroups);
+	});
+});
+
+//////////////////////////////////////////////////
+// GET INDEX OF LAST ADDED GROUP
+//////////////////////////////////////////////////
+squad.get('/data/groupindex/:id', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		// console.log(foundSquad);
+		res.send(`${foundSquad.pastGroups.length - 1}`);
+	});
+});
+
+//////////////////////////////////////////////////
 // REMOVE PERSON FROM SQUAD
 //////////////////////////////////////////////////
 squad.delete('/data/:id/:nameIndex', (req, res) => {
 	squadModel.findById(req.params.id, (err, foundSquad) => {
 		let updatedSquad = foundSquad;
 
-		console.log(`nameIndex is $(req.params.nameIndex)`);
+		// console.log(`nameIndex is $(req.params.nameIndex)`);
 
 		updatedSquad.names[req.params.nameIndex].archived = true;
 
@@ -90,7 +138,7 @@ squad.delete('/data/:id/:nameIndex', (req, res) => {
 				}
 				res.send('successfully removed name');
 
-				console.log(updatedFoundSquad);
+				// console.log(updatedFoundSquad);
 			}
 		);
 	});
@@ -103,10 +151,10 @@ squad.put('/data/:id/:nameIndex/:absent', (req, res) => {
 	squadModel.findById(req.params.id, (err, foundSquad) => {
 		let updatedSquad = foundSquad;
 
-		console.log(`nameIndex is ${req.params.nameIndex}`);
-		console.log(
-			`Absent is ${req.params.absent} and is type ${typeof req.params.absent}`
-		);
+		// console.log(`nameIndex is ${req.params.nameIndex}`);
+		// console.log(
+		// 	`Absent is ${req.params.absent} and is type ${typeof req.params.absent}`
+		// );
 
 		if (req.params.absent === 'true') {
 			updatedSquad.names[req.params.nameIndex].absent = false;
@@ -114,8 +162,8 @@ squad.put('/data/:id/:nameIndex/:absent', (req, res) => {
 			updatedSquad.names[req.params.nameIndex].absent = true;
 		}
 
-		console.log('Updated squad prior to pushing into the db:');
-		console.log(updatedSquad);
+		// console.log('Updated squad prior to pushing into the db:');
+		// console.log(updatedSquad);
 
 		squadModel.findByIdAndUpdate(
 			req.params.id,
@@ -188,7 +236,7 @@ squad.post('/savegroups/:id', (req, res) => {
 
 		foundSquad.pastGroups.push(newPastGroups);
 
-		console.log(foundSquad);
+		// console.log(foundSquad);
 
 		//Push back into db
 		squadModel.findByIdAndUpdate(

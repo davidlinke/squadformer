@@ -62,7 +62,6 @@ h3 {
 
 #headerText {
 	font-weight: 600;
-	/* font-size: 3rem; */
 	display: inline;
 }
 
@@ -74,12 +73,15 @@ h3 {
 	pointer-events: none; /* need this to make link clickable on object */
 }
 
-#tagline {
-}
-
 .bold {
 	font-weight: 600;
 	font-style: italic;
+	color: var(--contrast-color);
+}
+
+.boldTime {
+	font-weight: 600;
+	/* font-style: italic; */
 }
 
 #brainButtons {
@@ -227,39 +229,32 @@ select:focus {
 }
 
 #namesContainer {
-	/* background-color: var(--main-color); */
 	border: 1px solid var(--main-color);
 	border-radius: 0.4rem;
-	display: flex;
-	/* flex-wrap: wrap; */
-	flex-direction: column;
-	/* padding: 1%; */
-	padding: 2vw 6vw;
-	justify-content: space-evenly;
 	width: 42.5vw;
 	margin-right: 1vw;
+	padding: 2vw 6vw;
+}
+
+#divForNames {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
 }
 
 .individualNamesContainer {
-	/* background-color: var(--contrast-color); */
 	color: var(--main-color);
 	font-weight: 400;
 	width: 50%;
-	/* min-width: 200px; */
-	/* margin: 1%; */
-	/* padding: 1%; */
 	cursor: pointer;
 }
 
 .individualNamesContainer p {
 	margin: 0;
 	padding: 0;
-	/* font-family: 'Oswald', sans-serif; */
 }
 
 #showGroupForm {
-	/* margin-top: 4%; */
-	/* padding: 0 30%; */
 	padding: 2vw 6vw;
 	width: 42.5vw;
 	border: 1px solid var(--main-color);
@@ -269,7 +264,7 @@ select:focus {
 
 .draggableContainer {
 	width: 30%;
-	background: lightgrey;
+	background: var(--main-color);
 	margin: 2% 0;
 	display: flex;
 	flex-wrap: wrap;
@@ -277,7 +272,7 @@ select:focus {
 	justify-content: space-evenly;
 	align-items: flex-start;
 	align-content: flex-start;
-	/* border: 0.1rem solid var(--main-color); */
+	border: 0.1rem solid var(--main-color);
 	border-radius: 0.4rem;
 }
 
@@ -289,15 +284,15 @@ select:focus {
 	display: block;
 	background-color: var(--contrast-color);
 	align-self: flex-start;
-	/* border: 0.1rem solid var(--main-color); */
+	border: 0.1rem solid var(--main-color);
 	border-radius: 0.4rem;
 }
 
-#combinationsDiv {
+#combinationsDiv,
+.viewGroupsContainer {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
-	/* padding: 1vw; */
 }
 
 #buildGroupsButtonDiv,
@@ -311,7 +306,6 @@ select:focus {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	/* flex-wrap: wrap; */
 }
 
 .buttonFill {
@@ -330,7 +324,8 @@ select:focus {
 	color: var(--green);
 }
 
-#groupSizeSubmit {
+#groupSizeSubmit,
+#groupSaveSubmit {
 	margin-top: 5%;
 }
 
@@ -346,18 +341,6 @@ select:focus {
 	color: var(--green);
 }
 
-/* .buttonFillColor {
-	background-color: var(--green);
-	border-color: var(--green);
-	color: var(--contrast-color);
-}
-
-.buttonFillColor:hover {
-	background-color: var(--contrast-color);
-	border-color: var(--green);
-	color: var(--green);
-} */
-
 /* HIDE ARROWS ON NUMBER INPUT FIELD */
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
@@ -370,17 +353,16 @@ input[type='number'] {
 
 #showCombinationsParentDiv {
 	margin-top: 5%;
+	padding: 2vw 6vw;
 	border: 1px solid var(--main-color);
 	border-radius: 0.4rem;
+	text-align: center;
 }
 
 #editNameIcon {
 	display: inline-block;
 	width: 20px;
 	margin-left: 1vw;
-	/* padding-top: 10px; */
-	/* position: absolute;
-	transform: translate(15vw, -5vw); */
 	pointer-events: none; /* need this to make link clickable on object */
 	cursor: crosshair;
 }
@@ -400,19 +382,17 @@ input[type='number'] {
 	font-size: 1.2rem;
 	font-weight: 700;
 	text-transform: uppercase;
+	background-color: var(--contrast-color);
 }
 
 .tooltipButton {
 	color: var(--green);
 	margin: 0;
 }
+
 .divider {
-	/* position: absolute; */
 	display: inline;
 	color: var(--main-color);
-	/* border: solid 0.5px red; */
-	/* margin-right: -10px; */
-	/* height: 25px; */
 }
 
 #markNameAbsent {
@@ -438,4 +418,85 @@ input[type='number'] {
 
 #absent {
 	color: var(--main-lighter-color);
+}
+
+label {
+	color: var(--main-color);
+}
+
+input {
+	color: var(--main-color);
+}
+
+#groupHistoryDiv {
+	margin-top: 5%;
+	padding: 2vw 6vw;
+	border: 0.1rem solid var(--main-color);
+	border-radius: 0.4rem;
+	text-align: center;
+}
+
+#groupHistoryDiv a {
+	display: block;
+}
+
+.titleContainer {
+	text-align: center;
+}
+
+#combinationsTitle {
+	margin-bottom: 1%;
+}
+
+#combinationsSubtitle {
+	font-style: italic;
+}
+
+#combinationsRepeatMessage {
+	display: inline-block;
+	padding: 5px 10px;
+	background-color: var(--salmon);
+	border-radius: 0.4rem;
+	color: var(--contrast-color);
+	font-weight: 700;
+}
+
+.individualGroupOuter {
+	width: 30%;
+	/* background: var(--main-color); */
+	margin: 2% 0;
+	/* display: flex;
+	flex-wrap: wrap; */
+	padding: 1vw;
+	/* justify-content: space-evenly;
+	align-items: flex-start;
+	align-content: flex-start; */
+	border: 0.1rem solid var(--main-color);
+	border-radius: 0.4rem;
+}
+
+.individualGroupTitle,
+.individualGroupInner,
+.individualGroupOuter {
+	text-align: center;
+}
+
+.individualGroupTitle {
+	/* border-bottom: 0.1rem solid var(--main-color); */
+	/* padding: 0 5% 2% 5%;
+	margin: 2% 15% 0 15%; */
+	margin-top: 1rem;
+}
+
+.individualGroupTitle h4 {
+	/* margin-bottom: 0; */
+	font-weight: 600;
+}
+
+#groupFormDate {
+	font-style: italic;
+}
+
+.individualGroupInner {
+	margin-top: 2.5rem;
 }
