@@ -18,20 +18,42 @@ A responsively designed website that let's you form random groups of people. It 
 
 ## Features
 
-- 
+- Create a squad of people
+- Stores last created squad in local storage so if you forget the URL, you can get back to it on the homepage
+- Edit squad name
+- Add, remove, and mark people as absent in your squad
+- Generates groups from the people in your squad of a group size of your choosing
+- Suggests group sizes for even distribution
+- Can rearrange people in groups by dragging and dropping
+- Can save groups
+- Can see a read-only page of group composition to send to people in your squad
+- Can see a history of past groups generated
+- Alerts you if no more newly random squads can be generated
 
-## Technologies
+## Technologies, Frameworks, and Libraries
 
 - HTML / CSS
 - Javascript
-
-## Frameworks and Libraries Used
-
+- Express
+- EJS
+- MongoDB
 - jQuery
 - Milligram
+- Dragula
 - Popover
 - Moment
 
 ## Future Improvements
 
-- 
+- Better form validation / handling of extra spaces and newlines
+- Give visual feedback if a rearranged group is a repeat of a past group
+- Make URL for read only groups page unique so the edit URL cannot be found from it
+- Improve dragging and dropping so new groups can be formed and if no one is in a group any longer, it is removed
+- Allow for resetting of past group combinations history
+- Allow for editing of peoples names
+- Add favicon
+- Maybe adding accounts/logins, though I like the simplicity of it working without it.
+- Add concept of multiple squad management rather than separate links for each squad (i.e. for a teacher with multiple classrooms, if they don't want to individually bookmark each classroom)
+- 404 page customization
+- Investigate ways to make group randomization algorithm more efficient
+- Remove old data from the database automatically after a period of inactivity
