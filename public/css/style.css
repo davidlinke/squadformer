@@ -607,4 +607,8 @@ input {
 		margin-top: 10%;
 		padding: 0 5%;
 	}
+
+	#tagline {
+		font-weight: 400;
+	}
 }
