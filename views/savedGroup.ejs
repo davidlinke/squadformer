@@ -22,12 +22,9 @@
 		<div class="pageContainer">
 			<div class="titleContainer">
 				<h3><%= squadName %></h3>
-				<!-- Format Date, only works in UTC time since we cannot get the users timezone server side -->
-				<% const time = moment(`${pastGroup.createdAt}`); %> <% const
-				formattedTime = time.format('MMMM Do YYYY, h:mm a'); %>
 				<h5 id="groupFormDate">
 					Groups formed on
-					<span class="boldTime"><%= formattedTime + ' UTC' %></span>
+					<span class="boldTime"></span>
 				</h5>
 			</div>
 
