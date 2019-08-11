@@ -21,10 +21,18 @@ let drake = dragula({
 			return true;
 		}
 	}
-}).on('drop', function(element, target, source, sibling) {
-	removeEmptyNameContainers();
-	addNewNameContainer(target);
-});
+})
+	.on('drag', function(el, source) {
+		// prevent page scrolling on mobile while dragging
+		$(document).on('touchstart', function(e) {
+			e.preventDefault();
+		});
+	})
+	.on('drop', function(element, target, source, sibling) {
+		removeEmptyNameContainers(); // remove any empty .draggableContainer divs
+		addNewNameContainer(target); // handle add new name div
+		$(document).off('touchstart'); // re-enable scrolling on mobile
+	});
 
 //////////////////////////////////////////////////
 // Upon Visiting Page, Store ID in Local Storage

@@ -43,7 +43,6 @@ A responsively designed website that let's you form random groups of people. It 
 - Better form validation / handling of extra spaces and newlines
 - Give visual feedback if a rearranged group is a repeat of a past group
 - Make URL for read only groups page unique so the edit URL cannot be found from it
-- Improve dragging and dropping so new groups can be formed and if no one is in a group any longer, it is removed
 - Allow for resetting of past group combinations history
 - Allow for editing of peoples names
 - Maybe adding accounts/logins, though I like the simplicity of it working without it.

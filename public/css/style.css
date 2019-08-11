@@ -527,7 +527,7 @@ input {
 }
 
 .addNew {
-	background-color: var(--blue);
+	background-color: var(--contrast-color);
 	border-color: var(--blue);
 	align-items: center;
 }
