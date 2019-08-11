@@ -524,9 +524,9 @@ input {
 	display: inline;
 }
 
-#currentURL a {
+#currentURL a,
+.normalTextLink {
 	font-family: 'Josefin Slab', serif;
-	/* font-weight: 700; */
 	cursor: pointer;
 }
 
