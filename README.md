@@ -24,6 +24,7 @@ A responsively designed website that let's you form random groups of people. It 
 - Can see a read-only page of group composition to send to people in your squad
 - Can see a history of past groups generated
 - Alerts you if no more newly random squads can be generated
+- Can reset past combination history
 - Custom 404 / 500 error page
 
 ## Technologies, Frameworks, and Libraries
@@ -43,7 +44,6 @@ A responsively designed website that let's you form random groups of people. It 
 
 - Better form validation / handling of extra spaces and newlines
 - Make URL for read only groups page unique so the edit URL cannot be found from it
-- Allow for resetting of past group combinations history
 - Allow for editing of peoples names
 - Maybe adding accounts/logins, though I like the simplicity of it working without it.
 - Add concept of multiple squad management rather than separate links for each squad (i.e. for a teacher with multiple classrooms, if they don't want to individually bookmark each classroom)
