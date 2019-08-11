@@ -13,6 +13,16 @@ $('#editNamesPopup').css('display', 'block');
 //////////////////////////////////////////////////
 // Initialize Dragging and Dropping
 //////////////////////////////////////////////////
+let scrollable = true;
+
+const listener = function(e) {
+	if (!scrollable) {
+		e.preventDefault();
+	}
+};
+
+document.addEventListener('touchmove', listener, { passive: false });
+
 let drake = dragula({
 	moves: function(element, source, handle, sibling) {
 		if ($(element).attr('id') === 'addText') {
@@ -24,14 +34,16 @@ let drake = dragula({
 })
 	.on('drag', function(el, source) {
 		// prevent page scrolling on mobile while dragging
-		$(document).on('touchstart', function(e) {
-			e.preventDefault();
-		});
+		// $(document).on('touchstart', function(e) {
+		// 	e.preventDefault();
+		// });
+		scrollable = false;
 	})
 	.on('drop', function(element, target, source, sibling) {
 		removeEmptyNameContainers(); // remove any empty .draggableContainer divs
 		addNewNameContainer(target); // handle add new name div
-		$(document).off('touchstart'); // re-enable scrolling on mobile
+		// $(document).off('touchstart'); // re-enable scrolling on mobile
+		scrollable = true;
 	});
 
 //////////////////////////////////////////////////
