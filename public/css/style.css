@@ -460,7 +460,8 @@ input {
 	font-style: italic;
 }
 
-#combinationsRepeatMessage {
+#combinationsRepeatMessage,
+#repeatsFound {
 	display: inline-block;
 	padding: 5px 10px;
 	background-color: var(--salmon);
@@ -534,6 +535,10 @@ input {
 
 .addNew p {
 	margin: 0;
+}
+
+.repeatsContainer {
+	border: 0.4rem solid var(--salmon);
 }
 
 @media only screen and (max-width: 900px) {

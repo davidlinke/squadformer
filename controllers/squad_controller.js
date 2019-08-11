@@ -45,6 +45,18 @@ squad.get('/:id/:groupindex', (req, res) => {
 });
 
 //////////////////////////////////////////////////
+// GET PAST COMBINATIONS
+//////////////////////////////////////////////////
+squad.get('/data/:id/pastcombinations', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		if (err) {
+			console.log(err);
+		}
+		res.send(foundSquad.pastCombinations);
+	});
+});
+
+//////////////////////////////////////////////////
 // GET SQUAD NAME
 //////////////////////////////////////////////////
 squad.get('/data/:id/squadname', (req, res) => {
@@ -470,7 +482,6 @@ const groupToString = groupArray => {
 			groupString += ',';
 		}
 	});
-	// console.log(groupString);
 	return groupString;
 };
 

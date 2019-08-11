@@ -5,6 +5,8 @@ let selectedNameAbsentState = false;
 let listenerNameState = false;
 let listenerSquadNameState = false;
 
+let pastCombinations;
+
 $('#editTitlePopup').hide();
 $('#editNamesPopup').hide();
 $('#editTitlePopup').css('display', 'block');
@@ -38,6 +40,7 @@ let drake = dragula({
 	.on('drop', function(element, target, source, sibling) {
 		removeEmptyNameContainers(); // remove any empty .draggableContainer divs
 		addNewNameContainer(target); // handle add new name div
+		checkGroupsForRepeats(); // check if repeats and show visual feedback
 		scrollable = true; // re-enable scrolling on mobile
 	});
 
@@ -438,7 +441,7 @@ const showCombinations = arrayOfGroups => {
 	if (arrayOfGroups.repeats) {
 		const $repeats = $('<h5>')
 			.attr('id', 'combinationsRepeatMessage')
-			.text('No more unique group combinations possible.');
+			.text('No more unique group combinations possible at this group size.');
 		$combinationsTitleDiv.append($repeats);
 	}
 
@@ -491,6 +494,7 @@ const showCombinations = arrayOfGroups => {
 	);
 
 	addNewNameContainer();
+	checkGroupsForRepeats();
 };
 
 //////////////////////////////////////////////////
@@ -818,7 +822,91 @@ const showEvenGroupSizes = string => {
 		$('#generateGroupsTitleDiv').append($sizes);
 	}
 };
+//////////////////////////////////////////////////
+// Get past combinations
+//////////////////////////////////////////////////
+const getPastCombinations = id => {
+	$.ajax({
+		url: `/squads/data/${id}/pastcombinations`,
+		success: data => {
+			pastCombinations = data;
+		},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Check for repeats
+//////////////////////////////////////////////////
+const checkGroupsForRepeats = () => {
+	const $groupContainers = $('.draggableContainer');
+	let anyRepeats = false;
+
+	$groupContainers.each((index, group) => {
+		const tempGroup = [];
+
+		if ($(group).hasClass('addNew') === false) {
+			$(group)
+				.children()
+				.each(function() {
+					tempGroup.push(Number($(this).attr('nameindex')));
+				});
+			tempGroup.sort();
+			const key = groupToString(tempGroup);
+			console.log(key);
+			if (pastCombinations.hasOwnProperty(key)) {
+				// if repeat found, add class
+				console.log('repeat found');
+				$(group).addClass('repeatsContainer');
+
+				if (anyRepeats === false) {
+					anyRepeats = true;
+					// Display repeats message
+					if (
+						$('#combinationsRepeatMessage').length === 0 &&
+						$('#repeatsFound').length === 0
+					) {
+						const $repeats = $('<h5>')
+							.attr('id', 'repeatsFound')
+							.text('Repeats Found');
+						$('#combinationsTitleDiv').append($repeats);
+					}
+				}
+			} else if ($(group).hasClass('repeatsContainer')) {
+				//has repeate class already, should be removed
+				$(group).removeClass('repeatsContainer');
+			}
+		}
+	});
+
+	if (anyRepeats === false && $('#repeatsFound').length > 0) {
+		$('#repeatsFound').remove();
+	}
+};
+
+// $groupContainers.each((index, group) => {
+// 	if ($(group).children().length === 0 && !$(group).hasClass('addNew')) {
+// 		$(group).remove();
+// 	}
+// });
+
+// Ensure removes id if no repeats
+
+// Convert array to comma separated string representation (I like this format better than JSON.stringify)
+const groupToString = groupArray => {
+	let groupString = '';
+	groupArray.forEach((item, index) => {
+		groupString += item;
+		if (index != groupArray.length - 1) {
+			groupString += ',';
+		}
+	});
+	return groupString;
+};
 
 // CALL FUNCTIONS
 squadName(squadID);
 showGroupForm();
+getPastCombinations(squadID);

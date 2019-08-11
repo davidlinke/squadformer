@@ -19,6 +19,7 @@ A responsively designed website that let's you form random groups of people. It 
 - Generates groups from the people in your squad of a group size of your choosing
 - Suggests group sizes for even distribution
 - Can rearrange people in groups by dragging and dropping
+- Displays visual feedback if a group combination has existed in the past
 - Can save groups
 - Can see a read-only page of group composition to send to people in your squad
 - Can see a history of past groups generated
@@ -41,7 +42,6 @@ A responsively designed website that let's you form random groups of people. It 
 ## Future Improvements
 
 - Better form validation / handling of extra spaces and newlines
-- Give visual feedback if a rearranged group is a repeat of a past group
 - Make URL for read only groups page unique so the edit URL cannot be found from it
 - Allow for resetting of past group combinations history
 - Allow for editing of peoples names
