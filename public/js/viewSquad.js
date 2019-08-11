@@ -13,14 +13,14 @@ $('#editNamesPopup').css('display', 'block');
 //////////////////////////////////////////////////
 // Initialize Dragging and Dropping
 //////////////////////////////////////////////////
+// Prevent scrolling on mobile while dragging and dropping
+// Solution from https://github.com/bevacqua/dragula/issues/487#issuecomment-383872371
 let scrollable = true;
-
 const listener = function(e) {
 	if (!scrollable) {
 		e.preventDefault();
 	}
 };
-
 document.addEventListener('touchmove', listener, { passive: false });
 
 let drake = dragula({
@@ -33,17 +33,12 @@ let drake = dragula({
 	}
 })
 	.on('drag', function(el, source) {
-		// prevent page scrolling on mobile while dragging
-		// $(document).on('touchstart', function(e) {
-		// 	e.preventDefault();
-		// });
-		scrollable = false;
+		scrollable = false; // disable page scrolling on mobile while dragging
 	})
 	.on('drop', function(element, target, source, sibling) {
 		removeEmptyNameContainers(); // remove any empty .draggableContainer divs
 		addNewNameContainer(target); // handle add new name div
-		// $(document).off('touchstart'); // re-enable scrolling on mobile
-		scrollable = true;
+		scrollable = true; // re-enable scrolling on mobile
 	});
 
 //////////////////////////////////////////////////
