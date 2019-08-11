@@ -484,14 +484,10 @@ input {
 }
 
 .individualGroupTitle {
-	/* border-bottom: 0.1rem solid var(--main-color); */
-	/* padding: 0 5% 2% 5%;
-	margin: 2% 15% 0 15%; */
 	margin-top: 1rem;
 }
 
 .individualGroupTitle h4 {
-	/* margin-bottom: 0; */
 	font-weight: 600;
 }
 
@@ -528,6 +524,16 @@ input {
 .normalTextLink {
 	font-family: 'Josefin Slab', serif;
 	cursor: pointer;
+}
+
+.addNew {
+	background-color: var(--blue);
+	border-color: var(--blue);
+	align-items: center;
+}
+
+.addNew p {
+	margin: 0;
 }
 
 @media only screen and (max-width: 900px) {

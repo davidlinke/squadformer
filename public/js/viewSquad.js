@@ -11,6 +11,22 @@ $('#editTitlePopup').css('display', 'block');
 $('#editNamesPopup').css('display', 'block');
 
 //////////////////////////////////////////////////
+// Initialize Dragging and Dropping
+//////////////////////////////////////////////////
+let drake = dragula({
+	moves: function(element, source, handle, sibling) {
+		if ($(element).attr('id') === 'addText') {
+			return false; // prevent addText paragraph text from being moveable
+		} else {
+			return true;
+		}
+	}
+}).on('drop', function(element, target, source, sibling) {
+	removeEmptyNameContainers();
+	addNewNameContainer(target);
+});
+
+//////////////////////////////////////////////////
 // Upon Visiting Page, Store ID in Local Storage
 //////////////////////////////////////////////////
 localStorage.setItem('squad', squadID);
@@ -427,6 +443,14 @@ const showCombinations = arrayOfGroups => {
 		});
 	});
 
+	// Add to dragula
+	const arrayOfNameContainers = [].slice.call(
+		document.querySelectorAll('.draggableContainer')
+	);
+	arrayOfNameContainers.forEach(element => {
+		drake.containers.push(element);
+	});
+
 	const $saveGroupsDiv = $('<div>').attr('id', 'saveGroupsForm');
 	$showCombinationsParentDiv.append($saveGroupsDiv);
 
@@ -443,7 +467,7 @@ const showCombinations = arrayOfGroups => {
 
 	groupSaveButtonListener();
 
-	//Scroll to created groups
+	// Scroll to created groups
 	$('html, body').animate(
 		{
 			scrollTop: $('#showCombinationsParentDiv').offset().top
@@ -451,8 +475,7 @@ const showCombinations = arrayOfGroups => {
 		500
 	);
 
-	// Initialize dragging
-	dragging();
+	addNewNameContainer();
 };
 
 //////////////////////////////////////////////////
@@ -464,12 +487,15 @@ const saveGroups = () => {
 
 	$groupContainers.each((index, group) => {
 		const tempGroup = [];
-		$(group)
-			.children()
-			.each(function() {
-				tempGroup.push(Number($(this).attr('nameindex')));
-			});
-		groups.push(tempGroup);
+
+		if ($(group).hasClass('addNew') === false) {
+			$(group)
+				.children()
+				.each(function() {
+					tempGroup.push(Number($(this).attr('nameindex')));
+				});
+			groups.push(tempGroup);
+		}
 	});
 
 	return groups;
@@ -482,23 +508,35 @@ const removeEmptyNameContainers = () => {
 	const $groupContainers = $('.draggableContainer');
 
 	$groupContainers.each((index, group) => {
-		if ($(group).children().length === 0) {
+		if ($(group).children().length === 0 && !$(group).hasClass('addNew')) {
 			$(group).remove();
 		}
 	});
 };
 
 //////////////////////////////////////////////////
-// Enable Dragula dragging
+// Add New Name Group Container
 //////////////////////////////////////////////////
-const dragging = () => {
-	// Enable draggin for all containers with class draggableContainer
-	dragula([].slice.call(document.querySelectorAll('.draggableContainer'))).on(
-		'drop',
-		function(el) {
-			removeEmptyNameContainers();
-		}
-	);
+const addNewNameContainer = (target = null) => {
+	// If something is dropped on add new container, make it a normal draggable container
+	if ($(target).hasClass('addNew')) {
+		$(target).removeClass('addNew');
+		$('#addText').remove();
+	}
+
+	// If add new does not exist on page already, make a new one
+	if ($('.addNew').length === 0) {
+		const $add = $('<div>').attr('class', 'draggableContainer addNew');
+		$('#combinationsDiv').append($add);
+
+		const $addText = $('<p>')
+			.text('Drag a name here to create a new group')
+			.attr('id', 'addText');
+		$add.append($addText);
+
+		// Add to dragula containers
+		drake.containers.push(document.querySelector('.addNew'));
+	}
 };
 
 //////////////////////////////////////////////////
