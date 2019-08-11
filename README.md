@@ -6,15 +6,9 @@ A responsively designed website that let's you form random groups of people. It 
 
 ![screenshot of home page](https://github.com/davidlinke/squadformer/blob/master/public/images/screenshots/home.png 'Screenshot of home page')
 
-
-
 ![screenshot of view squads page](https://github.com/davidlinke/squadformer/blob/master/public/images/screenshots/viewSquad.png 'Screenshot of view squads page')
 
-
-
 ![screenshot of view groups page](https://github.com/davidlinke/squadformer/blob/master/public/images/screenshots/viewGroups.png 'Screenshot of view groups page')
-
-
 
 ## Features
 
@@ -29,6 +23,7 @@ A responsively designed website that let's you form random groups of people. It 
 - Can see a read-only page of group composition to send to people in your squad
 - Can see a history of past groups generated
 - Alerts you if no more newly random squads can be generated
+- Custom 404 / 500 error page
 
 ## Technologies, Frameworks, and Libraries
 
@@ -38,10 +33,10 @@ A responsively designed website that let's you form random groups of people. It 
 - EJS
 - MongoDB
 - jQuery
-- Milligram
-- Dragula
-- Popover
-- Moment
+- [Milligram](https://milligram.io)
+- [Dragula](https://bevacqua.github.io/dragula/)
+- [Popover.js](https://popper.js.org)
+- [Moment.js](https://momentjs.com)
 
 ## Future Improvements
 
@@ -51,9 +46,7 @@ A responsively designed website that let's you form random groups of people. It 
 - Improve dragging and dropping so new groups can be formed and if no one is in a group any longer, it is removed
 - Allow for resetting of past group combinations history
 - Allow for editing of peoples names
-- Add favicon
 - Maybe adding accounts/logins, though I like the simplicity of it working without it.
 - Add concept of multiple squad management rather than separate links for each squad (i.e. for a teacher with multiple classrooms, if they don't want to individually bookmark each classroom)
-- 404 page customization
-- Investigate ways to make group randomization algorithm more efficient
+- Investigate ways to make group randomization algorithm more efficient / allow for fuzzier logic to reduce members of a group from being grouped together as much
 - Remove old data from the database automatically after a period of inactivity

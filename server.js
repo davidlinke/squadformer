@@ -21,13 +21,11 @@ app.get('/', (req, res) => {
 
 app.use(function(req, res) {
 	res.status(400);
-	console.log('there seems to be a 404 error');
 	res.render('error.ejs', { title: '404: File Not Found' });
 });
 
 app.use(function(error, req, res, next) {
 	res.status(500);
-	console.log('there seems to be a 500 error');
 	res.render('error.ejs', {
 		title: '500: Internal Server Error',
 		error: error
