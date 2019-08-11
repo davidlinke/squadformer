@@ -476,16 +476,30 @@ const saveGroups = () => {
 };
 
 //////////////////////////////////////////////////
+// Remove empty name containers
+//////////////////////////////////////////////////
+const removeEmptyNameContainers = () => {
+	const $groupContainers = $('.draggableContainer');
+
+	$groupContainers.each((index, group) => {
+		if ($(group).children().length === 0) {
+			$(group).remove();
+		}
+	});
+};
+
+//////////////////////////////////////////////////
 // Enable Dragula dragging
 //////////////////////////////////////////////////
 const dragging = () => {
 	// Enable draggin for all containers with class draggableContainer
-	dragula([].slice.call(document.querySelectorAll('.draggableContainer')));
+	dragula([].slice.call(document.querySelectorAll('.draggableContainer'))).on(
+		'drop',
+		function(el) {
+			removeEmptyNameContainers();
+		}
+	);
 };
-
-// CALL FUNCTIONS
-squadName(squadID);
-showGroupForm();
 
 //////////////////////////////////////////////////
 // Edit Squad Names Menu
@@ -751,3 +765,7 @@ const showEvenGroupSizes = string => {
 		$('#generateGroupsTitleDiv').append($sizes);
 	}
 };
+
+// CALL FUNCTIONS
+squadName(squadID);
+showGroupForm();
