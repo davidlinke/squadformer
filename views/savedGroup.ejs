@@ -2,18 +2,32 @@
 <html lang="en">
 	<head>
 		<% include partials/head.ejs %>
-		<script src="/js/moment.js"></script>
+		<script
+			defer
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous"
+		></script>
+		<script defer src="/js/moment.js"></script>
+		<script defer src="/js/savedGroup.js"></script>
+		<style>
+			#time {
+				display: none;
+			}
+		</style>
 	</head>
 	<body>
 		<% include partials/header.ejs %>
+		<div id="time"><%= pastGroup.createdAt %></div>
 		<div class="pageContainer">
 			<div class="titleContainer">
 				<h3><%= squadName %></h3>
-				<!-- Format Date -->
+				<!-- Format Date, only works in UTC time since we cannot get the users timezone server side -->
 				<% const time = moment(`${pastGroup.createdAt}`); %> <% const
 				formattedTime = time.format('MMMM Do YYYY, h:mm a'); %>
 				<h5 id="groupFormDate">
-					Groups formed on <span class="boldTime"><%= formattedTime %></span>
+					Groups formed on
+					<span class="boldTime"><%= formattedTime + ' UTC' %></span>
 				</h5>
 			</div>
 
