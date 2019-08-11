@@ -935,8 +935,8 @@ const removePastCombinationsListener = () => {
 			'Are you sure you want to reset your past combinations history? Your past groups will still be visible/accessible; however newly generated groups may contain repeats. This action is non-reversible.'
 		);
 		if (confirmed) {
+			removePastCombinations(squadID);
 		}
-		removePastCombinations(squadID);
 	});
 };
 
