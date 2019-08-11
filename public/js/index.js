@@ -1,23 +1,23 @@
+//Hide footer initially to prevent page loading jumpiness
+$('#homefooter').hide();
+
+const setHeight = () => {
+	$('#brainOuter').height($('#brainBox').css('height'));
+};
+
+const showFooter = () => {
+	$('#homefooter').show();
+};
+
 $(window).on('load', function() {
-	const setHeight = () => {
-		// console.log($('#brainBox').css('height'));
-		$('#brainOuter').height($('#brainBox').css('height'));
-	};
-
-	// Resize height of outer brain box on load
-	// SOMETIMES FIRES BEFORE THINGS ARE LOADED, adding a small delay fixes this
+	// Sometimes content is not fully loaded before executing, adding a small delay fixed this
 	setTimeout(setHeight, 100);
-
-	// Resize height of outer brain box on window resize
-	$(window).resize(() => {
-		setHeight();
-		// console.log($('#brainBox').css('height'));
-	});
+	setTimeout(showFooter, 100);
 
 	// Show last created squad button if one exists and set link / adjust layout
 	if (localStorage.getItem('squad')) {
 		$('#lastCreatedSquadButton').css('display', 'block');
-		$('#brainButtons').css('top', '57%'); // UPDATE FOR SMALL SCREEN LAYOUTS!
+		$('#brainButtons').css('top', '57%');
 		$('#lastSquadLink').attr(
 			'href',
 			`/squads/${localStorage.getItem('squad')}`
@@ -39,4 +39,9 @@ $('#createSquadButton').on('click', () => {
 	} else {
 		$('#createForm').slideUp(500);
 	}
+});
+
+// Resize height of outer brain box on window resize
+$(window).resize(() => {
+	setHeight();
 });

@@ -7,6 +7,8 @@ let listenerSquadNameState = false;
 
 $('#editTitlePopup').hide();
 $('#editNamesPopup').hide();
+$('#editTitlePopup').css('display', 'block');
+$('#editNamesPopup').css('display', 'block');
 
 //////////////////////////////////////////////////
 // Upon Visiting Page, Store ID in Local Storage
@@ -293,7 +295,7 @@ const showGroupForm = () => {
 		.attr('id', 'groupSize')
 		.attr('min', '2')
 		.attr('max', '10')
-		.attr('value', '3');
+		.attr('value', '2');
 	$form.append($input);
 
 	const $buildGroupsButtonDiv = $('<div>').attr('id', 'buildGroupsButtonDiv');
