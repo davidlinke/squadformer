@@ -441,7 +441,9 @@ const showCombinations = arrayOfGroups => {
 	if (arrayOfGroups.repeats) {
 		const $repeats = $('<h5>')
 			.attr('id', 'combinationsRepeatMessage')
-			.text('No more unique group combinations possible at this group size.');
+			.text(
+				'No longer possible to generate all unique group combinations at this group size.'
+			);
 		$combinationsTitleDiv.append($repeats);
 	}
 
@@ -749,6 +751,16 @@ const showGroupsHistory = groupsObject => {
 
 			$groupHistoryTitleDiv.after($link);
 		});
+
+		const $resetHistoryDiv = $('<div>').attr('id', 'resetHistoryDiv');
+		$groupHistoryDiv.append($resetHistoryDiv);
+
+		const $resetHistory = $('<a>')
+			.text('Reset Past Combinations')
+			.attr('id', 'resetHistory');
+		$resetHistoryDiv.append($resetHistory);
+
+		removePastCombinationsListener();
 	}
 };
 
@@ -886,14 +898,6 @@ const checkGroupsForRepeats = () => {
 	}
 };
 
-// $groupContainers.each((index, group) => {
-// 	if ($(group).children().length === 0 && !$(group).hasClass('addNew')) {
-// 		$(group).remove();
-// 	}
-// });
-
-// Ensure removes id if no repeats
-
 // Convert array to comma separated string representation (I like this format better than JSON.stringify)
 const groupToString = groupArray => {
 	let groupString = '';
@@ -904,6 +908,36 @@ const groupToString = groupArray => {
 		}
 	});
 	return groupString;
+};
+
+//////////////////////////////////////////////////
+// Remove Past Combinations
+//////////////////////////////////////////////////
+const removePastCombinations = id => {
+	$.ajax({
+		url: `/squads/data/${id}/pastcombinations`,
+		type: 'DELETE',
+		success: data => {
+			getPastCombinations(squadID);
+		},
+		error: (request, status, err) => {
+			console.log('Error getting data: ' + request + status + err);
+		}
+	});
+};
+
+//////////////////////////////////////////////////
+// Remove Past Combinations Listener
+//////////////////////////////////////////////////
+const removePastCombinationsListener = () => {
+	$('#resetHistory').on('click', () => {
+		let confirmed = confirm(
+			'Are you sure you want to reset your past combinations history? Your past groups will still be visible/accessible; however newly generated groups may contain repeats. This action is non-reversible.'
+		);
+		if (confirmed) {
+		}
+		removePastCombinations(squadID);
+	});
 };
 
 // CALL FUNCTIONS

@@ -541,6 +541,19 @@ input {
 	border: 0.4rem solid var(--salmon);
 }
 
+#resetHistoryDiv {
+	margin-top: 2rem;
+}
+
+#resetHistory {
+	color: var(--salmon);
+	cursor: pointer;
+}
+
+#resetHistory:hover {
+	color: var(--main-color);
+}
+
 @media only screen and (max-width: 900px) {
 	#brainButtons {
 		position: relative;

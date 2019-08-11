@@ -57,6 +57,30 @@ squad.get('/data/:id/pastcombinations', (req, res) => {
 });
 
 //////////////////////////////////////////////////
+// REMOVE PAST SQUAD HISTORY
+//////////////////////////////////////////////////
+squad.delete('/data/:id/pastcombinations', (req, res) => {
+	squadModel.findById(req.params.id, (err, foundSquad) => {
+		let updatedSquad = foundSquad;
+
+		updatedSquad.pastCombinations = {
+			seed: ''
+		};
+
+		squadModel.findByIdAndUpdate(
+			req.params.id,
+			updatedSquad,
+			(error, updatedFoundSquad) => {
+				if (err) {
+					console.log(err);
+				}
+				res.send('successfully removed past combinations history');
+			}
+		);
+	});
+});
+
+//////////////////////////////////////////////////
 // GET SQUAD NAME
 //////////////////////////////////////////////////
 squad.get('/data/:id/squadname', (req, res) => {
