@@ -442,6 +442,14 @@ const makeGroups = (names, groupSize, pastCombinations) => {
 		}
 	}
 
+	// If only a single group and is a repeat, set anyRepeats to true
+	if (
+		groupsArray.length === 1 &&
+		pastCombinations.hasOwnProperty(groupToString(groupsArray[0]))
+	) {
+		anyRepeats = true;
+	}
+
 	if (anyRepeats) {
 		// console.log('There are repeats in these groups');
 	}
