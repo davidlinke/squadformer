@@ -3,6 +3,7 @@ const squadID = $('#squadIndex').text();
 let selectedNameIndex = 0;
 let selectedNameAbsentState = false;
 let listenerNameState = false;
+let listenerSquadNameState = false;
 
 $('#editTitlePopup').hide();
 $('#editNamesPopup').hide();
@@ -77,9 +78,6 @@ const namesArrayOfObjects = id => {
 // Post Groups When Saved
 //////////////////////////////////////////////////
 const saveGroupsToDB = (id, groups) => {
-	// console.log('Posting from browser...');
-	// console.log('groups data to be included:');
-	// console.log(groups);
 	$.ajax({
 		url: `/squads/savegroups/${id}`,
 		data: { groups: JSON.stringify(groups) },
@@ -168,8 +166,13 @@ const showNames = namesArray => {
 	});
 
 	showAddNameButton();
-	editSquadNameMenu();
+
 	editPeopleMenu();
+
+	if (!listenerSquadNameState) {
+		listenerSquadNameState = true;
+		editSquadNameMenu();
+	}
 
 	showEvenGroupSizes(calculateGroupNumbers(nameCount));
 };
@@ -351,8 +354,6 @@ const getAddedGroupIndexAndRedirect = id => {
 	$.ajax({
 		url: `/squads/data/groupindex/${id}`,
 		success: data => {
-			// console.log(data);
-			// showCombinations(data);
 			window.location.href = `/squads/${squadID}/${data}`;
 		},
 		error: (request, status, err) => {
@@ -368,8 +369,6 @@ const getCombinations = (id, size) => {
 	$.ajax({
 		url: `/squads/randomize/${size}/${id}`,
 		success: data => {
-			// console.log('SHOW COMBINATIONS DATA:');
-			// console.log(data);
 			showCombinations(data);
 		},
 		error: (request, status, err) => {
@@ -382,7 +381,6 @@ const getCombinations = (id, size) => {
 // Show group combinations
 //////////////////////////////////////////////////
 const showCombinations = arrayOfGroups => {
-	// console.log(arrayOfGroups);
 	const $showCombinationsParentDiv = $('<div>').attr(
 		'id',
 		'showCombinationsParentDiv'
@@ -460,26 +458,18 @@ const showCombinations = arrayOfGroups => {
 //////////////////////////////////////////////////
 const saveGroups = () => {
 	const $groupContainers = $('.draggableContainer');
-
 	const groups = [];
 
-	// console.log($groupContainers);
-
 	$groupContainers.each((index, group) => {
-		// console.log(group);
 		const tempGroup = [];
-		// console.log($(group).children());
-
 		$(group)
 			.children()
 			.each(function() {
-				// console.log($(this).attr('nameindex'));
 				tempGroup.push(Number($(this).attr('nameindex')));
 			});
 		groups.push(tempGroup);
 	});
 
-	// console.log(groups);
 	return groups;
 };
 
@@ -501,13 +491,11 @@ showGroupForm();
 const editSquadNameMenu = () => {
 	const ref = $('#squadTitle');
 	const popup = $('#editTitlePopup');
-	// const popup = $('#editNamesPopup');
 
 	popup.hide();
 
-	if (!listenerNameState) {
-		editTitleListener();
-	}
+	listenerSquadNameState = true;
+	editTitleListener();
 
 	ref.click(function() {
 		if (
@@ -517,11 +505,10 @@ const editSquadNameMenu = () => {
 			popup.hide();
 		} else {
 			popup.show();
-			var popper = new Popper(ref, popup, {
+
+			const popper = new Popper(ref, popup, {
 				placement: 'right',
-				onCreate: function(data) {
-					// console.log(data);
-				},
+				onCreate: function(data) {},
 				modifiers: {
 					offset: {
 						enabled: true,
@@ -540,13 +527,13 @@ const editTitleListener = () => {
 	$('#startTitleEdit').on('click', () => {
 		if ($('#startTitleEdit').text() === 'edit') {
 			// Edit State, switch to save
-			// console.log('editing state');
+
 			$('#startTitleEdit').text('save');
 			$('#squadTitle').attr('contenteditable', 'true');
 			$('#squadTitle').focus();
 		} else {
 			//Save State
-			// console.log('save state');
+
 			$('#startTitleEdit').text('edit');
 			$('#squadTitle').attr('contenteditable', 'false');
 			$('#squadTitle').blur(); /* Unfocuses */
@@ -592,13 +579,11 @@ const editPeopleMenu = () => {
 		} else {
 			selectedNameIndex = Number(clickedNameIndex);
 			selectedNameAbsentState = selectedNameAbsense;
-			// console.log(selectedNameIndex);
+
 			popup.show();
-			var popper = new Popper(selectedName, popup, {
+			const popper = new Popper(selectedName, popup, {
 				placement: 'right',
-				onCreate: function(data) {
-					// console.log(data);
-				}
+				onCreate: function(data) {}
 			});
 		}
 	});
@@ -681,7 +666,6 @@ const showGroupsHistory = groupsObject => {
 		$groupHistoryTitleDiv.append($title);
 
 		groupsObject.forEach((pastGroup, index) => {
-			// console.log(pastGroup);
 			const time = moment(`${pastGroup.createdAt}`);
 			const formattedTime = time.format('MMMM Do YYYY, h:mm a');
 
@@ -702,7 +686,6 @@ const getGroupsHistory = id => {
 	$.ajax({
 		url: `/squads/data/${id}/history`,
 		success: data => {
-			// console.log(data);
 			showGroupsHistory(data);
 		},
 		error: (request, status, err) => {
@@ -724,32 +707,11 @@ const calculateGroupNumbers = count => {
 		return '1';
 	}
 
-	if (count % 2 === 0) {
-		countArray.push('2');
-	}
-	if (count % 3 === 0) {
-		countArray.push('3');
-	}
-	if (count % 4 === 0) {
-		countArray.push('4');
-	}
-	if (count % 5 === 0) {
-		countArray.push('5');
-	}
-	if (count % 6 === 0) {
-		countArray.push('6');
-	}
-	if (count % 7 === 0) {
-		countArray.push('7');
-	}
-	if (count % 8 === 0) {
-		countArray.push('8');
-	}
-	if (count % 9 === 0) {
-		countArray.push('9');
-	}
-	if (count % 10 === 0) {
-		countArray.push('10');
+	// Check if evenly divisible between numbers and add to array
+	for (let i = 2; i <= 10; i++) {
+		if (count % i === 0) {
+			countArray.push(`${i}`);
+		}
 	}
 
 	let countString = '';
