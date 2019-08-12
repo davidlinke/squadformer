@@ -10,10 +10,6 @@ const showFooter = () => {
 };
 
 $(window).on('load', function() {
-	// Sometimes content is not fully loaded before executing, adding a small delay fixed this
-	setTimeout(setHeight, 100);
-	setTimeout(showFooter, 100);
-
 	// Show last created squad button if one exists and set link / adjust layout
 	if (localStorage.getItem('squad')) {
 		$('#lastCreatedSquadButton').css('display', 'block');
@@ -23,6 +19,10 @@ $(window).on('load', function() {
 			`/squads/${localStorage.getItem('squad')}`
 		);
 	}
+
+	// Sometimes content is not fully loaded before executing, adding a small delay fixed this
+	setTimeout(setHeight, 100);
+	setTimeout(showFooter, 100);
 });
 
 // Show or hide create squad form
