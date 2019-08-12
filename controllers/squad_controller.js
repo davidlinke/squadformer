@@ -272,8 +272,6 @@ squad.get('/randomize/:size/:id', (req, res) => {
 // SAVE RANDOM GROUPS
 //////////////////////////////////////////////////
 squad.post('/savegroups/:id', (req, res) => {
-	// console.log('Received:');
-	// console.log(JSON.parse(req.body.groups));
 	const groups = JSON.parse(req.body.groups);
 
 	squadModel.findById(req.params.id, (err, foundSquad) => {
@@ -285,7 +283,7 @@ squad.post('/savegroups/:id', (req, res) => {
 
 		groups.forEach((group, index) => {
 			// Make past combination keys and push into object
-			foundSquad.pastCombinations[groupToString(group)] = true;
+			foundSquad.pastCombinations[groupToString(group.sort())] = true;
 
 			// Make past groups into objects and push into pastGroupCombinations array
 			const newGroup = {

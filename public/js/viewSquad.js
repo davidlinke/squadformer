@@ -867,7 +867,6 @@ const checkGroupsForRepeats = () => {
 				});
 			tempGroup.sort();
 			const key = groupToString(tempGroup);
-			console.log(key);
 			if (pastCombinations.hasOwnProperty(key)) {
 				// if repeat found, add class
 				console.log('repeat found');
