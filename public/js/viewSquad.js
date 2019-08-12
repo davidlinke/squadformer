@@ -869,7 +869,6 @@ const checkGroupsForRepeats = () => {
 			const key = groupToString(tempGroup);
 			if (pastCombinations.hasOwnProperty(key)) {
 				// if repeat found, add class
-				console.log('repeat found');
 				$(group).addClass('repeatsContainer');
 
 				if (anyRepeats === false) {
