@@ -21,8 +21,8 @@ $(window).on('load', function() {
 	}
 
 	// Sometimes content is not fully loaded before executing, adding a small delay fixed this
-	setTimeout(setHeight, 100);
-	setTimeout(showFooter, 100);
+	setTimeout(setHeight, 1000);
+	setTimeout(showFooter, 1000);
 });
 
 // Show or hide create squad form
