@@ -20,9 +20,12 @@ $(window).on('load', function() {
 		);
 	}
 
-	// Sometimes content is not fully loaded before executing, adding a small delay fixed this
+	// Sometimes setHeight is called before things are fully loaded and the footer is positioned incorrectly. Calling it several times at different intervals ensure it will display correctly eventually.
+	setHeight();
+	showFooter();
+	setTimeout(setHeight, 100);
+	setTimeout(setHeight, 500);
 	setTimeout(setHeight, 1000);
-	setTimeout(showFooter, 1000);
 });
 
 // Show or hide create squad form
