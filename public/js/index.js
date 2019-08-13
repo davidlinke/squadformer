@@ -20,12 +20,16 @@ $(window).on('load', function() {
 		);
 	}
 
-	// Sometimes setHeight is called before things are fully loaded and the footer is positioned incorrectly. Calling it several times at different intervals ensure it will display correctly eventually.
+	// Sometimes setHeight is called before things are fully loaded and the footer is positioned incorrectly (this happens on slower internet connections). Calling it several times at different intervals ensure it will display correctly at the earliest possible time.
 	setHeight();
 	showFooter();
+	setTimeout(setHeight, 50);
 	setTimeout(setHeight, 100);
+	setTimeout(setHeight, 250);
 	setTimeout(setHeight, 500);
+	setTimeout(setHeight, 750);
 	setTimeout(setHeight, 1000);
+	setTimeout(setHeight, 2000);
 });
 
 // Show or hide create squad form
